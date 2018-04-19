@@ -8,6 +8,8 @@ static unsigned int numberOfProcessors;
 
 static long globalN;
 
+static double** matrixC;
+
 void initMatrix(double** matrix){
     matrix = (double**) malloc(sizeof(double*) * globalN);
     if(!matrix){
@@ -21,9 +23,18 @@ void initMatrix(double** matrix){
     }
 }
 
+void freeMatrix(double** matrix){
+    for(long i = 0; i < globalN; i++){
+        free(matrix[i]);
+    }
+    free(matrix);
+}
+
+
+
 
 /**
- * The BSP Main method to run on multiple machines.
+ * This method will run on every machine.
  */
 void bspEntrance(){
 
@@ -38,17 +49,43 @@ void bspEntrance(){
     bsp_sync();
     bsp_pop_reg(&globalN);
 
+    int start = globalN/numberOfProcessors * s;
+    int k = start;
+    int nrows = 0; // ???
+
+    double** matrixA = NULL;
+    double** matrixB = NULL;
+    double** localMatrixC = NULL;
+    initMatrix(matrixA);
+    initMatrix(matrixB);
+    initMatrix(localMatrixC);
+
+    do {
+        for(int i = nrows; i < globalN;i++){
+            for(int j = 0; j < globalN; j++){
+                for(int h = k; k < 0;k++){ // ???
+                    localMatrixC[i][j] += matrixA[i][h] * matrixB[h][j];
+                }
+            }
+        }
+        //k = ; ???
+    } while(k != start);
 
 
-    double** matrix;
-    initMatrix(matrix);
-
+    freeMatrix(matrixA);
+    freeMatrix(matrixB);
+    freeMatrix(localMatrixC);
     bsp_end();
 }
 
 int main(int argc, char **argv){
     bsp_init(bspEntrance, argc, argv);
     numberOfProcessors = 36;
+    double** matrixC = NULL;
+    initMatrix(matrixC);
+    if(numberOfProcessors > bsp_nprocs()){
+        numberOfProcessors = bsp_nprocs();
+    }
 
     bspEntrance();
 
