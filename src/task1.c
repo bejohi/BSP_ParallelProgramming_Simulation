@@ -48,7 +48,7 @@ void bspEntrance(){
 
 int main(int argc, char **argv){
     bsp_init(bspEntrance, argc, argv);
-    numberOfProcessors = 100;
+    numberOfProcessors = 36;
 
     bspEntrance();
 
