@@ -13,7 +13,7 @@ void initMatrix(double** matrix){
     if(!matrix){
         bsp_abort("Not enough memory for allocating the matrix available\n");
     }
-    for(double i = 0; i < globalN; i++){
+    for(long i = 0; i < globalN; i++){
         matrix[i] = (double*) malloc(sizeof(double) * globalN);
         if(!matrix[i]){
             bsp_abort("Not enough memory for allocating the matrix available\n");
@@ -31,14 +31,14 @@ void bspEntrance(){
     long p= bsp_nprocs();
     long s= bsp_pid();
 
-    bsp_push_reg(&n,sizeof(long));
+    bsp_push_reg(&globalN,sizeof(long));
     bsp_sync();
 
     bsp_get(0,&globalN,0,&globalN,sizeof(long));
     bsp_sync();
     bsp_pop_reg(&globalN);
 
-    
+
 
     double** matrix;
     initMatrix(matrix);
