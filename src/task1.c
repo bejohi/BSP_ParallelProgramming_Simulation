@@ -131,6 +131,9 @@ void bspEntrance(){
         for(int i = nrows; i < n;i++){
             for(int j = 0; j < n; j++){
                 for(int h = k; h < k + n/p;h++){ // h or k
+                    if(DEEP_DEBUG){
+                        printf("i=%d,j=%d,h=%d,k=%d for s=%d\n",i,j,h,k,s);
+                    }
                     localMatrixC[i][j] += matrixA[i][h] * matrixB[h-k][j];
                 }
             }
