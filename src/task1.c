@@ -80,7 +80,7 @@ void bspEntrance(){
 
     // TODO: Random fill.
 
-    bsp_push_reg(&pointerB,n*nrows*sizeof(double));
+    bsp_push_reg(pointerB,n*nrows*sizeof(double));
     bsp_sync();
 
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
