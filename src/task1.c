@@ -2,7 +2,7 @@
 
 
 #define DEBUG 1
-#define DEEP_DEBUG 1
+#define DEEP_DEBUG 0
 
 /**
  * A global variable to define the number of processors.
@@ -93,7 +93,6 @@ void bspEntrance(){
                 }
             }
         }
-        if(DEBUG) printf("set new k...\n",k,s);
         k = (k + n / numberOfProcessors) % n;
         if(DEBUG) printf("Start distribution k=%d for s=%ld...\n",k,s);
         bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
