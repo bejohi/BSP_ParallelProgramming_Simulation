@@ -114,24 +114,25 @@ void bspEntrance(){
     double** matrixA = NULL;
     double** matrixB = NULL;
     double** localMatrixC = NULL;
+    double* pointerB = matrixB[0];
 
     if(DEBUG) printf("Init matrix A for s=%d...\n",s);
-    initNOverPMatrix(matrixA,n,p);
+    initNOverPMatrix(matrixA,n,nrows);
 
     if(DEBUG) printf("Init matrix B for s=%d...\n",s);
-    initNOverPMatrix(matrixB,n,p);
+    initNOverPMatrix(matrixB,n,nrows);
 
     if(DEBUG) printf("Init matrix C for s=%d...\n",s);
     initMatrix(localMatrixC,n);
 
-    if(DEBUG) printf("Random fill matrix C for s=%d...\n",s);
+    if(DEBUG) printf("Random fill matrix C for s=%d, n=%d...\n",s);
     fillNOverNmatrixWith0(localMatrixC,n);
 
     if(DEBUG) printf("Random fill matrix A for s=%d...\n",s);
-    fillNOverPMatrixWithRandomValue(matrixA,n,p);
+    fillNOverPMatrixWithRandomValue(matrixA,n,nrows);
 
     if(DEBUG) printf("Random fill matrix B for s=%d...\n",s);
-    fillNOverPMatrixWithRandomValue(matrixB,n,p);
+    fillNOverPMatrixWithRandomValue(matrixB,n,nrows);
 
     if(DEBUG) printf("...Matrix init done for s=%d\n",s);
 
@@ -144,6 +145,8 @@ void bspEntrance(){
             }
         }
         k = (k + n / numberOfProcessors) % n;
+        bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
+        bsp_sync();
         // TODO: Shift the matrices.
     } while(k != start);
     if(DEBUG) printf("...calculations done for s=%d\n",s);
@@ -151,8 +154,8 @@ void bspEntrance(){
     // TODO: Make it possible to access the (i,j) cell and matching row
     // and colum.
 
-    freeNOverPMatrix(matrixA,p);
-    freeNOverPMatrix(matrixB,p);
+    freeNOverPMatrix(matrixA,nrows);
+    freeNOverPMatrix(matrixB,nrows);
     freeMatrix(localMatrixC, n);
     bsp_end();
     bsp_sync(); // Should we sync here?
