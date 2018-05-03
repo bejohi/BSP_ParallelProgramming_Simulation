@@ -2,7 +2,7 @@
 
 
 #define DEBUG 1
-#define DEEP_DEBUG 0
+#define DEEP_DEBUG 1
 
 /**
  * A global variable to define the number of processors.
@@ -19,51 +19,6 @@ double inline randfrom(double min, double max)
     double range = (max - min); 
     double div = RAND_MAX / range;
     return min + (rand() / div);
-}
-
-void inline initMatrix(double** matrix, int n){
-    matrix = (double**) malloc(sizeof(double*) * n);
-    if(!matrix){
-        bsp_abort("Not enough memory for allocating the matrix available\n");
-    }
-    for(long i = 0; i < n; i++){
-        matrix[i] = (double*) malloc(sizeof(double) * n);
-        if(!matrix[i]){
-            bsp_abort("Not enough memory for allocating the matrix available\n");
-        }
-    }
-}
-
-void inline freeMatrix(double** matrix, int n){
-    for(long i = 0; i < n; i++){
-        free(matrix[i]);
-    }
-    free(matrix);
-}
-
-void inline initNOverPMatrix(double*** matrix, int n, int p){
-    matrix = (double**) malloc(sizeof(double*) * n);
-    long s= bsp_pid();
-    
-    if(!matrix){
-        bsp_abort("Not enough memory for allocating the matrix available\n");
-    }
-    if(DEEP_DEBUG)printf("little malloc done for s=%d\n",s);
-    for(int i = 0; i < p; i++){
-        matrix[i] = (double*) malloc(sizeof(double) * n);
-
-        if(!matrix[i]){
-            bsp_abort("Not enough memory for allocating the matrix available\n");
-        }
-        if(DEEP_DEBUG)printf("big malloc [%d] done for s=%d\n",i,s);
-    }
-}
-
-void inline freeNOverPMatrix(double** matrix, int p){
-    for(long i = 0; i < p; i++){
-        free(matrix[i]);
-    }
-    free(matrix);
 }
 
 void inline fillNOverNmatrixWith0(double** matrix, int n){
@@ -139,10 +94,10 @@ void bspEntrance(){
             }
         }
         k = (k + n / numberOfProcessors) % n;
-        if(DEBUG) printf("Start distribution k=%ld for s=%d...\n",k,s);
+        if(DEBUG) printf("Start distribution k=%d for s=%d...\n",k,s);
         bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
         bsp_sync();
-        if(DEBUG) printf("...distribution k=%ld for s=%d done...\n",k,s);
+        if(DEBUG) printf("...distribution k=%d for s=%d done...\n",k,s);
         // TODO: Shift the matrices.
     } while(k != start);
     if(DEBUG) printf("...calculations done for s=%d\n",s);
@@ -168,7 +123,7 @@ int main(int argc, char **argv){
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
     }
-    if(DEBUG) printf("Start program with n=%d,p=%d\n",globalN,numberOfProcessors);
+    if(DEBUG) printf("Start program with n=%ld,p=%d\n",globalN,numberOfProcessors);
     bspEntrance();
 
     exit(EXIT_SUCCESS);
