@@ -1,6 +1,8 @@
 #include "task1.h"
 
 
+#define DEBUG 1
+
 /**
  * A global variable to define the number of processors.
  */ 
@@ -8,7 +10,7 @@ static unsigned int numberOfProcessors;
 
 static long globalN;
 
-static double** matrixC;
+//static double** matrixC;
 
 // TODO: Check if this works.
 double randfrom(double min, double max) 
@@ -128,6 +130,9 @@ void bspEntrance(){
     } while(k != start);
 
 
+    // TODO: Make it possible to access the (i,j) cell and matching row
+    // and colum.
+
     freeNOverPMatrix(matrixA,p);
     freeNOverPMatrix(matrixB,p);
     freeMatrix(localMatrixC, globalN);
@@ -136,15 +141,19 @@ void bspEntrance(){
 }
 
 int main(int argc, char **argv){
+    if(DEBUG) printf("Start bsp_init...\n");
     bsp_init(bspEntrance, argc, argv);
+    if(DEBUG) printf("... bsp_init done!\n");
     numberOfProcessors = 36;
     globalN = 10;
-    double** matrixC = NULL;
-    initMatrix(matrixC, globalN);
+    
+    //double** matrixC = NULL;
+    //initMatrix(matrixC, globalN);
+    // TODO: Check how to distribute the result matrix.
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
     }
-
+    if(DEBUG) printf("n=%d,p=\n",globalN,numberOfProcessors);
     bspEntrance();
 
     exit(EXIT_SUCCESS);
