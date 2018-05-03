@@ -114,7 +114,6 @@ void bspEntrance(){
     double** matrixA = NULL;
     double** matrixB = NULL;
     double** localMatrixC = NULL;
-    double* pointerB = matrixB[0];
 
     if(DEBUG) printf("Init matrix A for s=%d...\n",s);
     initNOverPMatrix(matrixA,n,nrows);
@@ -124,6 +123,8 @@ void bspEntrance(){
 
     if(DEBUG) printf("Init matrix C for s=%d...\n",s);
     initMatrix(localMatrixC,n);
+
+    double* pointerB = matrixB[0];
 
     if(DEBUG) printf("Random fill matrix C for s=%d, n=%d...\n",s);
     fillNOverNmatrixWith0(localMatrixC,n);
