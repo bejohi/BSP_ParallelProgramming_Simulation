@@ -83,19 +83,21 @@ void fillNOverPMatrixWithRandomValue(double** matrix, int n, int p){
 /**
  * This method will run on every machine.
  */
-void bspEntrance(long n){
+void bspEntrance(){
 
     bsp_begin(numberOfProcessors);
+
     long p= bsp_nprocs();
     long s= bsp_pid();
-    //long n = globalN;
+    long n = globalN;
     bsp_push_reg(n,sizeof(long));
     bsp_sync();
-
+    if(DEBUG) printf("p,s,n calc done for s=%d\n",s);
     bsp_get(0,&n,0,&n,sizeof(long));
     bsp_sync();
     bsp_pop_reg(&n);
     bsp_sync();
+    if(DEBUG) printf("n distribution done for s=%d\n",s);
 
     // TODO: nloc?
     // TODO: Distribute globalN as local n over the processors.
@@ -141,9 +143,7 @@ void bspEntrance(long n){
 }
 
 int main(int argc, char **argv){
-    if(DEBUG) printf("Start bsp_init...\n");
     bsp_init(bspEntrance, argc, argv);
-    if(DEBUG) printf("... bsp_init done!\n");
     numberOfProcessors = 36;
     globalN = 10;
     
@@ -153,8 +153,8 @@ int main(int argc, char **argv){
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
     }
-    if(DEBUG) printf("n=%d,p=%d\n",globalN,numberOfProcessors);
-    bspEntrance(globalN);
+    if(DEBUG) printf("Start program with n=%d,p=%d\n",globalN,numberOfProcessors);
+    bspEntrance();
 
     exit(EXIT_SUCCESS);
 }
