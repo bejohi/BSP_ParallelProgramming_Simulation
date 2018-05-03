@@ -2,6 +2,7 @@
 
 
 #define DEBUG 1
+#define DEEP_DEBUG 1
 
 /**
  * A global variable to define the number of processors.
@@ -13,14 +14,14 @@ static long globalN;
 //static double** matrixC;
 
 // TODO: Check if this works.
-double randfrom(double min, double max) 
+double inline randfrom(double min, double max) 
 {
     double range = (max - min); 
     double div = RAND_MAX / range;
     return min + (rand() / div);
 }
 
-void initMatrix(double** matrix, int n){
+void inline initMatrix(double** matrix, int n){
     matrix = (double**) malloc(sizeof(double*) * n);
     if(!matrix){
         bsp_abort("Not enough memory for allocating the matrix available\n");
@@ -33,34 +34,39 @@ void initMatrix(double** matrix, int n){
     }
 }
 
-void freeMatrix(double** matrix, int n){
+void inline freeMatrix(double** matrix, int n){
     for(long i = 0; i < n; i++){
         free(matrix[i]);
     }
     free(matrix);
 }
 
-void initNOverPMatrix(double** matrix, int n, int p){
+void inline initNOverPMatrix(double** matrix, int n, int p){
     matrix = (double**) malloc(sizeof(double*) * n);
+    long s= bsp_pid();
+    
     if(!matrix){
         bsp_abort("Not enough memory for allocating the matrix available\n");
     }
+    if(DEEP_DEBUG)printf("little malloc done for s=%d\n",s);
     for(int i = 0; i < p; i++){
         matrix[i] = (double*) malloc(sizeof(double) * n);
+
         if(!matrix[i]){
             bsp_abort("Not enough memory for allocating the matrix available\n");
         }
+        if(DEEP_DEBUG)printf("big malloc [%d] done for s=%d\n",i,s);
     }
 }
 
-void freeNOverPMatrix(double** matrix, int p){
+void inline freeNOverPMatrix(double** matrix, int p){
     for(long i = 0; i < p; i++){
         free(matrix[i]);
     }
     free(matrix);
 }
 
-void fillNOverNmatrixWith0(double** matrix, int n){
+void inline fillNOverNmatrixWith0(double** matrix, int n){
     for(int y = 0; y < n; y++){
         for(int x = 0; x < n; x++){
             matrix[y][x] = 0;
@@ -68,7 +74,7 @@ void fillNOverNmatrixWith0(double** matrix, int n){
     }
 }
 
-void fillNOverPMatrixWithRandomValue(double** matrix, int n, int p){
+void inline fillNOverPMatrixWithRandomValue(double** matrix, int n, int p){
     for(int y = 0; y < n; y++){
         for(int x = 0; x < n; x++){
             matrix[y][x] = randfrom(0,1000); // TODO: Use ~MAXDDOUBLE
