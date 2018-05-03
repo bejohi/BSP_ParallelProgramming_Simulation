@@ -2,7 +2,7 @@
 
 
 #define DEBUG 1
-#define DEEP_DEBUG 1
+#define DEEP_DEBUG 0
 
 /**
  * A global variable to define the number of processors.
@@ -110,14 +110,17 @@ void bspEntrance(){
     int nrows = end - start;
 
     // Matrix init
-    double** matrixA = (double**) malloc(sizeof(double*) * n);
-    double** matrixB = (double**) malloc(sizeof(double*) * n);
-    double** localMatrixC = (double**) malloc(sizeof(double*) * n);
+    double* pointerA = (double*) malloc(sizeof(double)*n*nrows);
+    double* pointerB = (double*) malloc(sizeof(double)*n*nrows);
+    double* pointerC = (double*) malloc(sizeof(double)*n*nrows);
+    double** matrixA = (double**) malloc(sizeof(double*) * nrows);
+    double** matrixB = (double**) malloc(sizeof(double*) * nrows);
+    double** localMatrixC = (double**) malloc(sizeof(double*) * nrows);
 
-    for(int i = 0; i < n; i++){
-        matrixA[i] = (double*) malloc(sizeof(double) * n);
-        matrixB[i] = (double*) malloc(sizeof(double) * n);
-        localMatrixC[i] = (double*) malloc(sizeof(double) * n);
+    for(int i = 0; i < nrows; i++){
+        matrixA[i] = pointerA + i*n;
+        matrixB[i] = pointerB + i*n;
+        localMatrixC[i] = pointerC + i*n;
     }
     double* pointerB = matrixB[0];
 
@@ -148,9 +151,9 @@ void bspEntrance(){
     // TODO: Make it possible to access the (i,j) cell and matching row
     // and colum.
 
-    freeNOverPMatrix(matrixA,nrows);
-    freeNOverPMatrix(matrixB,nrows);
-    freeMatrix(localMatrixC, n);
+    //freeNOverPMatrix(matrixA,nrows);
+    //freeNOverPMatrix(matrixB,nrows);
+    //freeMatrix(localMatrixC, n);
     bsp_end();
     bsp_sync(); // Should we sync here?
 }
