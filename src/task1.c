@@ -124,6 +124,7 @@ void bspEntrance(){
     if(DEBUG) printf("Init matrix C for s=%d...\n",s);
     initMatrix(localMatrixC,n);
 
+    if(DEBUG) printf("Create pointerB for s=%d...\n",s);
     double* pointerB = matrixB[0];
 
     if(DEBUG) printf("Random fill matrix C for s=%d, n=%d...\n",s);
