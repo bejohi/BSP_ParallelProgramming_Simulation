@@ -41,12 +41,12 @@ void freeMatrix(double** matrix, int n){
 }
 
 void initNOverPMatrix(double** matrix, int n, int p){
-    matrix = (double**) malloc(sizeof(double*) * globalN);
+    matrix = (double**) malloc(sizeof(double*) * n);
     if(!matrix){
         bsp_abort("Not enough memory for allocating the matrix available\n");
     }
     for(int i = 0; i < p; i++){
-        matrix[i] = (double*) malloc(sizeof(double) * globalN);
+        matrix[i] = (double*) malloc(sizeof(double) * n);
         if(!matrix[i]){
             bsp_abort("Not enough memory for allocating the matrix available\n");
         }
@@ -83,25 +83,25 @@ void fillNOverPMatrixWithRandomValue(double** matrix, int n, int p){
 /**
  * This method will run on every machine.
  */
-void bspEntrance(){
+void bspEntrance(long n){
 
     bsp_begin(numberOfProcessors);
     long p= bsp_nprocs();
     long s= bsp_pid();
-
-    bsp_push_reg(&globalN,sizeof(long));
+    //long n = globalN;
+    bsp_push_reg(n,sizeof(long));
     bsp_sync();
 
-    bsp_get(0,&globalN,0,&globalN,sizeof(long));
+    bsp_get(0,&n,0,&n,sizeof(long));
     bsp_sync();
-    bsp_pop_reg(&globalN);
+    bsp_pop_reg(&n);
     bsp_sync();
 
     // TODO: nloc?
     // TODO: Distribute globalN as local n over the processors.
 
-    int start = globalN/numberOfProcessors * s;
-    int end = globalN/p * (s+1);
+    int start = n/numberOfProcessors * s;
+    int end = n/p * (s+1);
     int k = start;
     int nrows = end - start;
 
@@ -109,23 +109,23 @@ void bspEntrance(){
     double** matrixA = NULL;
     double** matrixB = NULL;
     double** localMatrixC = NULL;
-    initNOverPMatrix(matrixA,globalN,p);
+    initNOverPMatrix(matrixA,n,p);
     
-    initNOverPMatrix(matrixB,globalN,p);
-    initMatrix(localMatrixC, globalN);
-    fillNOverNmatrixWith0(localMatrixC,globalN);
-    fillNOverPMatrixWithRandomValue(matrixA,globalN,p);
-    fillNOverPMatrixWithRandomValue(matrixB,globalN,p);
+    initNOverPMatrix(matrixB,n,p);
+    initMatrix(localMatrixC,n);
+    fillNOverNmatrixWith0(localMatrixC,n);
+    fillNOverPMatrixWithRandomValue(matrixA,n,p);
+    fillNOverPMatrixWithRandomValue(matrixB,n,p);
 
     do {
-        for(int i = nrows; i < globalN;i++){
-            for(int j = 0; j < globalN; j++){
-                for(int h = k; h < k + globalN/p;h++){ // h or k
+        for(int i = nrows; i < n;i++){
+            for(int j = 0; j < n; j++){
+                for(int h = k; h < k + n/p;h++){ // h or k
                     localMatrixC[i][j] += matrixA[i][h] * matrixB[h][j];
                 }
             }
         }
-        k = (k + globalN / numberOfProcessors) % globalN;
+        k = (k + n / numberOfProcessors) % n;
         // TODO: Shift the matrices.
     } while(k != start);
 
@@ -135,7 +135,7 @@ void bspEntrance(){
 
     freeNOverPMatrix(matrixA,p);
     freeNOverPMatrix(matrixB,p);
-    freeMatrix(localMatrixC, globalN);
+    freeMatrix(localMatrixC, n);
     bsp_end();
     bsp_sync(); // Should we sync here?
 }
@@ -153,8 +153,8 @@ int main(int argc, char **argv){
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
     }
-    if(DEBUG) printf("n=%d,p=\n",globalN,numberOfProcessors);
-    bspEntrance();
+    if(DEBUG) printf("n=%d,p=%d\n",globalN,numberOfProcessors);
+    bspEntrance(globalN);
 
     exit(EXIT_SUCCESS);
 }
