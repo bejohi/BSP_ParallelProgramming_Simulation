@@ -122,7 +122,6 @@ void bspEntrance(){
         matrixB[i] = pointerB + i*n;
         localMatrixC[i] = pointerC + i*n;
     }
-    double* pointerB = matrixB[0];
 
     // TODO: Random fill.
 
