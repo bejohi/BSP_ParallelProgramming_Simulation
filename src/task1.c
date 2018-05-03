@@ -136,8 +136,10 @@ void bspEntrance(){
             }
         }
         k = (k + n / numberOfProcessors) % n;
+        if(DEBUG) printf("Start distribution k=%ld for s=%d...\n",k,s);
         bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
         bsp_sync();
+        if(DEBUG) printf("...distribution k=%ld for s=%d done...\n",k,s);
         // TODO: Shift the matrices.
     } while(k != start);
     if(DEBUG) printf("...calculations done for s=%d\n",s);
