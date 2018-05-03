@@ -41,7 +41,7 @@ void inline freeMatrix(double** matrix, int n){
     free(matrix);
 }
 
-void inline initNOverPMatrix(double** matrix, int n, int p){
+void inline initNOverPMatrix(double*** matrix, int n, int p){
     matrix = (double**) malloc(sizeof(double*) * n);
     long s= bsp_pid();
     
@@ -124,7 +124,7 @@ void bspEntrance(){
     if(DEBUG) printf("n=%d, p=%d, nrows=%d for s=%d...\n",n,p,nrows,s);
 
     if(DEBUG) printf("Init matrix A for s=%d...\n",s);
-    initNOverPMatrix(matrixA,n,nrows);
+    initNOverPMatrix(&matrixA,n,nrows);
 
     if(DEBUG) printf("Init matrix B for s=%d...\n",s);
     initNOverPMatrix(&matrixB,n,nrows);
