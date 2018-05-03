@@ -131,7 +131,7 @@ void bspEntrance(){
         for(int i = nrows; i < n;i++){
             for(int j = 0; j < n; j++){
                 for(int h = k; h < k + n/p;h++){ // h or k
-                    localMatrixC[i][j] += matrixA[i][h] * matrixB[h][j];
+                    localMatrixC[i][j] += matrixA[i][h] * matrixB[h-k][j];
                 }
             }
         }
