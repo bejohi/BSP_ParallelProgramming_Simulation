@@ -127,7 +127,7 @@ void bspEntrance(){
     initNOverPMatrix(matrixA,n,nrows);
 
     if(DEBUG) printf("Init matrix B for s=%d...\n",s);
-    initNOverPMatrix(matrixB,n,nrows);
+    initNOverPMatrix(&matrixB,n,nrows);
 
     if(DEBUG) printf("Init matrix C for s=%d...\n",s);
     initMatrix(localMatrixC,n);
@@ -150,7 +150,7 @@ void bspEntrance(){
     fillNOverPMatrixWithRandomValue(matrixA,n,nrows);
 
     if(DEBUG) printf("Random fill matrix B for s=%d...\n",s);
-    fillNOverPMatrixWithRandomValue(matrixB,n,nrows);
+    fillNOverPMatrixWithRandomValue(&matrixB,n,nrows);
 
     if(DEBUG) printf("...Matrix init done for s=%d\n",s);
 
