@@ -101,18 +101,19 @@ void bspEntrance(){
         bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
         bsp_sync();
         if(DEBUG) printf("...distribution k=%d for s=%ld done...\n",k,s);
-        // TODO: Shift the matrices.
     } while(k != start);
     if(DEBUG) printf("...calculations done for s=%ld\n",s);
 
     // TODO: Make it possible to access the (i,j) cell and matching row
     // and colum.
 
-    //freeNOverPMatrix(matrixA,nrows);
-    //freeNOverPMatrix(matrixB,nrows);
-    //freeMatrix(localMatrixC, n);
+    free(matrixA);
+    free(matrixB);
+    free(localMatrixC);
+    free(pointerA);
+    free(pointerB);
+    free(pointerC);
     bsp_end();
-    bsp_sync(); // Should we sync here?
 }
 
 int main(int argc, char **argv){
