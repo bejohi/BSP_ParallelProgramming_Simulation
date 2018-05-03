@@ -89,14 +89,14 @@ void bspEntrance(){
 
     long p= bsp_nprocs();
     long s= bsp_pid();
-    long n = globalN;
+    long n = 10;
     bsp_push_reg(n,sizeof(long));
     bsp_sync();
     if(DEBUG) printf("p,s,n calc done for s=%d\n",s);
     bsp_get(0,&n,0,&n,sizeof(long));
     bsp_sync();
     bsp_pop_reg(&n);
-    bsp_sync();
+    //bsp_sync();
     if(DEBUG) printf("n distribution done for s=%d\n",s);
 
     // TODO: nloc?
