@@ -83,7 +83,7 @@ void bspEntrance(){
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
     do {
-        for(int i = nrows; i < n;i++){
+        for(int i = 0; i < nrows;i++){
             for(int j = 0; j < n; j++){
                 for(int h = k; h < k + n/p;h++){ // h or k
                     if(DEEP_DEBUG){
@@ -93,6 +93,7 @@ void bspEntrance(){
                 }
             }
         }
+        if(DEBUG) printf("set new k...\n",k,s);
         k = (k + n / numberOfProcessors) % n;
         if(DEBUG) printf("Start distribution k=%d for s=%ld...\n",k,s);
         bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
