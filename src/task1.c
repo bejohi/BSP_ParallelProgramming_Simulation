@@ -69,7 +69,7 @@ void fillNOverNmatrixWith0(double** matrix, int n){
 void fillNOverPMatrixWithRandomValue(double** matrix, int n, int p){
     for(int y = 0; y < n; y++){
         for(int x = 0; x < n; x++){
-            matrix[y][x] = randfrom(0,MAXFLOAT);
+            matrix[y][x] = randfrom(0,1000); // TODO: Use ~MAXDDOUBLE
         }
     }
 }
@@ -108,8 +108,12 @@ void bspEntrance(){
     double** matrixB = NULL;
     double** localMatrixC = NULL;
     initNOverPMatrix(matrixA,globalN,p);
+    
     initNOverPMatrix(matrixB,globalN,p);
     initMatrix(localMatrixC, globalN);
+    fillNOverNmatrixWith0(localMatrixC,globalN);
+    fillNOverPMatrixWithRandomValue(matrixA,globalN,p);
+    fillNOverPMatrixWithRandomValue(matrixB,globalN,p);
 
     do {
         for(int i = nrows; i < globalN;i++){
