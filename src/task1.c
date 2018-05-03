@@ -93,64 +93,37 @@ void bspEntrance(){
 
     bsp_begin(numberOfProcessors);
 
+    // Distribution between processors.
     long p= bsp_nprocs();
     long s= bsp_pid();
     long n = globalN;
     bsp_push_reg(&n,sizeof(long));
     bsp_sync();
 
-    if(DEBUG) printf("p,s,n calc done for s=%d\n",s);
-
     bsp_get(0,&n,0,&n,sizeof(long));
     bsp_sync();
     bsp_pop_reg(&n);
-    //bsp_sync();
-
-    if(DEBUG) printf("n distribution done for s=%d\n",s);
-
-    // TODO: nloc?
-    // TODO: Distribute globalN as local n over the processors.
 
     int start = n/numberOfProcessors * s;
     int end = n/p * (s+1);
     int k = start;
     int nrows = end - start;
 
-    // TODO: Don't init sqare matrix but n*nrows!
-    double** matrixA = NULL;
-    double** matrixB = NULL;
-    double** localMatrixC = NULL;
+    // Matrix init
+    double** matrixA = (double**) malloc(sizeof(double*) * n);
+    double** matrixB = (double**) malloc(sizeof(double*) * n);
+    double** localMatrixC = (double**) malloc(sizeof(double*) * n);
 
-    if(DEBUG) printf("n=%d, p=%d, nrows=%d for s=%d...\n",n,p,nrows,s);
-
-    if(DEBUG) printf("Init matrix A for s=%d...\n",s);
-    initNOverPMatrix(&matrixA,n,nrows);
-
-    if(DEBUG) printf("Init matrix B for s=%d...\n",s);
-    initNOverPMatrix(&matrixB,n,nrows);
-
-    if(DEBUG) printf("Init matrix C for s=%d...\n",s);
-    initMatrix(localMatrixC,n);
-
-    if(DEBUG) printf("Create pointerB for s=%d...\n",s);
-    if(DEBUG){
-        if(!matrixB){
-            printf("Problem 1 with b\n");
-        } else if(!matrixB[0]){
-            printf("Problem 2 with b\n");
-        }
-        
+    for(int i = 0; i < nrows; i++){
+        matrixA[i] = (double*) malloc(sizeof(double) * n);
+        matrixB[i] = (double*) malloc(sizeof(double) * n);
+    }
+    for(int i = 0; i < n; i++){
+        localMatrixC[i] = (double*) malloc(sizeof(double) * n);
     }
     double* pointerB = matrixB[0];
 
-    if(DEBUG) printf("Random fill matrix C for s=%d, n=%d...\n",s);
-    fillNOverNmatrixWith0(localMatrixC,n);
-
-    if(DEBUG) printf("Random fill matrix A for s=%d...\n",s);
-    fillNOverPMatrixWithRandomValue(matrixA,n,nrows);
-
-    if(DEBUG) printf("Random fill matrix B for s=%d...\n",s);
-    fillNOverPMatrixWithRandomValue(&matrixB,n,nrows);
+    // TODO: Random fill.
 
     if(DEBUG) printf("...Matrix init done for s=%d\n",s);
 
