@@ -80,27 +80,27 @@ void bspEntrance(){
 
     // TODO: Random fill.
 
-    if(DEBUG) printf("...Matrix init done for s=%d\n",s);
+    if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
     do {
         for(int i = nrows; i < n;i++){
             for(int j = 0; j < n; j++){
                 for(int h = k; h < k + n/p;h++){ // h or k
                     if(DEEP_DEBUG){
-                        printf("i=%d,j=%d,h=%d,k=%d for s=%d\n",i,j,h,k,s);
+                        printf("i=%d,j=%d,h=%d,k=%d for s=%ld\n",i,j,h,k,s);
                     }
                     localMatrixC[i][j] += matrixA[i][h] * matrixB[h-k][j];
                 }
             }
         }
         k = (k + n / numberOfProcessors) % n;
-        if(DEBUG) printf("Start distribution k=%d for s=%d...\n",k,s);
+        if(DEBUG) printf("Start distribution k=%d for s=%ld...\n",k,s);
         bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
         bsp_sync();
-        if(DEBUG) printf("...distribution k=%d for s=%d done...\n",k,s);
+        if(DEBUG) printf("...distribution k=%d for s=%ld done...\n",k,s);
         // TODO: Shift the matrices.
     } while(k != start);
-    if(DEBUG) printf("...calculations done for s=%d\n",s);
+    if(DEBUG) printf("...calculations done for s=%ld\n",s);
 
     // TODO: Make it possible to access the (i,j) cell and matching row
     // and colum.
