@@ -115,6 +115,8 @@ void bspEntrance(){
     double** matrixB = NULL;
     double** localMatrixC = NULL;
 
+    if(DEBUG) printf("n=%d, p=%d, nrows=%d for s=%d...\n",n,p,nrows,s);
+
     if(DEBUG) printf("Init matrix A for s=%d...\n",s);
     initNOverPMatrix(matrixA,n,nrows);
 
