@@ -114,13 +114,15 @@ void bspEntrance(){
     double** matrixA = NULL;
     double** matrixB = NULL;
     double** localMatrixC = NULL;
+
     initNOverPMatrix(matrixA,n,p);
-    
     initNOverPMatrix(matrixB,n,p);
     initMatrix(localMatrixC,n);
     fillNOverNmatrixWith0(localMatrixC,n);
     fillNOverPMatrixWithRandomValue(matrixA,n,p);
     fillNOverPMatrixWithRandomValue(matrixB,n,p);
+
+    if(DEBUG) printf("...Matrix init done for s=%d\n",s);
 
     do {
         for(int i = nrows; i < n;i++){
@@ -133,7 +135,7 @@ void bspEntrance(){
         k = (k + n / numberOfProcessors) % n;
         // TODO: Shift the matrices.
     } while(k != start);
-
+    if(DEBUG) printf("...calculations done for s=%d\n",s);
 
     // TODO: Make it possible to access the (i,j) cell and matching row
     // and colum.
@@ -147,7 +149,7 @@ void bspEntrance(){
 
 int main(int argc, char **argv){
     bsp_init(bspEntrance, argc, argv);
-    numberOfProcessors = 36;
+    numberOfProcessors = 2;
     globalN = 10;
     
     //double** matrixC = NULL;
