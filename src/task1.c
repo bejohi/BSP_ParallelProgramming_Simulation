@@ -114,11 +114,9 @@ void bspEntrance(){
     double** matrixB = (double**) malloc(sizeof(double*) * n);
     double** localMatrixC = (double**) malloc(sizeof(double*) * n);
 
-    for(int i = 0; i < nrows; i++){
+    for(int i = 0; i < n; i++){
         matrixA[i] = (double*) malloc(sizeof(double) * n);
         matrixB[i] = (double*) malloc(sizeof(double) * n);
-    }
-    for(int i = 0; i < n; i++){
         localMatrixC[i] = (double*) malloc(sizeof(double) * n);
     }
     double* pointerB = matrixB[0];
