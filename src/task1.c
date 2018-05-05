@@ -85,6 +85,7 @@ void bspEntrance(){
 
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
+    double timeStart= bsp_time();
     do {
         for(int i = 0; i < nrows;i++){
             for(int j = 0; j < n; j++){
@@ -102,23 +103,29 @@ void bspEntrance(){
         bsp_sync();
         if(DEBUG) printf("...distribution k=%d for s=%ld done...\n",k,s);
     } while(k != start);
+
+    
+    double timeEnd= bsp_time();
     if(DEBUG) printf("...calculations done for s=%ld\n",s);
 
+    if(s==0){
+        printf("Calculations done in %.6lf seconds\n",timeEnd-timeStart);
+    }
     // TODO: Make it possible to access the (i,j) cell and matching row
     // and colum.
 
-    free(matrixA);
+    /*free(matrixA);
     free(matrixB);
     free(localMatrixC);
     free(pointerA);
     free(pointerB);
-    free(pointerC);
+    free(pointerC);*/
     bsp_end();
 }
 
 int main(int argc, char **argv){
     bsp_init(bspEntrance, argc, argv);
-    numberOfProcessors = 2;
+    numberOfProcessors = 1;
     globalN = 10;
     
     //double** matrixC = NULL;
