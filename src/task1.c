@@ -78,6 +78,13 @@ void bspEntrance(){
         localMatrixC[i] = pointerC + i*n;
     }
 
+    for(int i = 0; i < nrows; i++){
+        for(int y = 0; y < n; y++){
+            matrixA[i][y] = randfrom(0,100);
+            matrixB[i][y] = randfrom(0,100);
+        }
+    }
+
     // TODO: Random fill.
 
     bsp_push_reg(pointerB,n*nrows*sizeof(double));
