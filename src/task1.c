@@ -116,10 +116,10 @@ void bspEntrance(){
 
     /*free(matrixA);
     free(matrixB);
-    free(localMatrixC);
+    free(localMatrixC);*/
     free(pointerA);
     free(pointerB);
-    free(pointerC);*/
+    free(pointerC);
     bsp_end();
 }
 
