@@ -125,7 +125,7 @@ void bspEntrance(){
 
 int main(int argc, char **argv){
     bsp_init(bspEntrance, argc, argv);
-    numberOfProcessors = 1;
+    numberOfProcessors = 2;
     globalN = 10;
     
     //double** matrixC = NULL;
