@@ -1,7 +1,7 @@
 #include "task1.h"
 
 
-#define DEBUG 1
+#define DEBUG 0
 #define DEEP_DEBUG 0
 
 /**
@@ -82,6 +82,7 @@ void bspEntrance(){
         for(int y = 0; y < n; y++){
             matrixA[i][y] = randfrom(0,100);
             matrixB[i][y] = randfrom(0,100);
+            localMatrixC[i][x] = 0;
         }
     }
 
@@ -142,7 +143,7 @@ int main(int argc, char **argv){
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
     }
-    if(DEBUG) printf("Start program with n=%ld,p=%d\n",globalN,numberOfProcessors);
+    printf("Start program with n=%ld,p=%d\n",globalN,numberOfProcessors);
     bspEntrance();
 
     exit(EXIT_SUCCESS);
