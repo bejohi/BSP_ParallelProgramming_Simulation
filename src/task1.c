@@ -117,13 +117,13 @@ void bspEntrance(){
     }
 
     if(s == 0){
-        double* result = NULL;
-        bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),result,sizeof(double));
+        double result = -1;
+        bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
-        if(result == NULL){
+        if(result == -1){
             printf("ERROR 14\n");
         }
-        printf("result for (%d,%d)= %lf\n",get_i,get_j,*result);
+        printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
     }
     bsp_sync();
     
