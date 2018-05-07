@@ -21,23 +21,6 @@ double inline randfrom(double min, double max)
     return min + (rand() / div);
 }
 
-void inline fillNOverNmatrixWith0(double** matrix, int n){
-    for(int y = 0; y < n; y++){
-        for(int x = 0; x < n; x++){
-            matrix[y][x] = 0;
-        }
-    }
-}
-
-void inline fillNOverPMatrixWithRandomValue(double** matrix, int n, int p){
-    for(int y = 0; y < n; y++){
-        for(int x = 0; x < n; x++){
-            matrix[y][x] = randfrom(0,1000); // TODO: Use ~MAXDDOUBLE
-        }
-    }
-}
-
-
 
 
 
@@ -82,7 +65,7 @@ void bspEntrance(){
         for(int y = 0; y < n; y++){
             matrixA[i][y] = randfrom(0,100);
             matrixB[i][y] = randfrom(0,100);
-            localMatrixC[i][x] = 0;
+            localMatrixC[i][y] = 0;
         }
     }
 
