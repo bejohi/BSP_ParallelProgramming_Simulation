@@ -141,7 +141,7 @@ int main(int argc, char **argv){
     printf("Please enter number of processors:");
     scanf("%d", &numberOfProcessors);
     printf("\nPlease enter size of matrix:");
-    scanf("%d", &globalN);
+    scanf("%ld", &globalN);
     printf("\nPlease enter i:");
     scanf("%d", &globalI);
     printf("\nPlease enter j:");
