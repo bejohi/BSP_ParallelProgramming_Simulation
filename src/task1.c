@@ -90,6 +90,9 @@ void bspEntrance(){
     do {
         for(int i = 0; i < nrows;i++){
             for(int j = 0; j < n; j++){
+                if(p==0){
+                    printf("p is zero\n");
+                }
                 for(int h = k; h < k + n/p;h++){ // h or k
                     if(DEEP_DEBUG){
                         printf("i=%d,j=%d,h=%d,k=%d for s=%ld\n",i,j,h,k,s);
