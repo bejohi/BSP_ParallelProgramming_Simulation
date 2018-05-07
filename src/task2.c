@@ -1,4 +1,4 @@
-#include "task1.h"
+#include "task2.h"
 
 
 #define DEBUG 0
@@ -81,8 +81,6 @@ void bspEntrance(){
     bsp_push_reg(pointerB,n*nrows*sizeof(double));
     bsp_sync();
 
-    int i_prozessor = get_i / nrows;
-
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
     double timeStart= bsp_time();
@@ -115,14 +113,6 @@ void bspEntrance(){
         printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
 
-    if(s == 0){
-        double* result;
-        bsp_get(i_prozessor,pointerC,(get_i%nrows) + get_j,result,sizeof(double));
-        bsp_sync();
-        printf("result for (%d,%d)= %d\n",get_i,get_j,*result);
-    }
-    bsp_sync();
-    
     
 
 
