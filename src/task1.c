@@ -116,9 +116,12 @@ void bspEntrance(){
     }
 
     if(s == 0){
-        double* result = -1;
+        double* result = NULL;
         bsp_get(i_prozessor,pointerC,(get_i%nrows) + get_j,result,sizeof(double));
         bsp_sync();
+        if(result == NULL){
+            printf("ERROR 14\n");
+        }
         printf("result for (%d,%d)= %lf\n",get_i,get_j,*result);
     }
     bsp_sync();
