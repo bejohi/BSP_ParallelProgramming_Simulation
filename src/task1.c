@@ -39,7 +39,7 @@ void bspEntrance(){
     long n = globalN;
     int get_i = globalI;
     int get_j = globalJ;
-    bsp_push_reg(&n,sizeof(int));
+    bsp_push_reg(&n,sizeof(long));
     bsp_push_reg(&get_i,sizeof(int));
     bsp_push_reg(&get_j,sizeof(int));
     bsp_sync();
@@ -49,6 +49,8 @@ void bspEntrance(){
     bsp_get(0,&get_j,0,&get_j,sizeof(int));
     bsp_sync();
     bsp_pop_reg(&n);
+    bsp_pop_reg(&get_i);
+    bsp_pop_reg(&get_j);
 
     int start = n/numberOfProcessors * s;
     int end = n/p * (s+1);
