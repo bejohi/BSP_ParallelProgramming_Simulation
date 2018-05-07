@@ -116,10 +116,10 @@ void bspEntrance(){
     }
 
     if(s == 0){
-        double* result;
+        double* result = -1;
         bsp_get(i_prozessor,pointerC,(get_i%nrows) + get_j,result,sizeof(double));
         bsp_sync();
-        printf("result for (%d,%d)= %d\n",get_i,get_j,*result);
+        printf("result for (%d,%d)= %lf\n",get_i,get_j,*result);
     }
     bsp_sync();
     
