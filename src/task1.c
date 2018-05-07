@@ -115,6 +115,7 @@ void bspEntrance(){
     double timeEnd= bsp_time();
     if(DEBUG) printf("...calculations done for s=%ld\n",s);
 
+    bsp_sync();
     if(s==0){
         printf("Calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
