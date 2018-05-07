@@ -23,9 +23,6 @@ double inline randfrom(double min, double max)
     return min + (rand() / div);
 }
 
-
-
-
 /**
  * This method will run on every machine.
  */
@@ -79,8 +76,6 @@ void bspEntrance(){
         }
     }
 
-    // TODO: Random fill.
-
     bsp_push_reg(pointerB,n*nrows*sizeof(double));
     bsp_sync();
 
@@ -89,11 +84,8 @@ void bspEntrance(){
     double timeStart= bsp_time();
     do {
         for(int i = 0; i < nrows;i++){
-            for(int j = 0; j < n; j++){
-                if(p==0){
-                    printf("p is zero\n");
-                }
-                for(int h = k; h < k + n/p;h++){ // h or k
+            for(int h = k; h < k + n/p;h++){ // h or k
+                for(int j = 0; j < n; j++){
                     if(DEEP_DEBUG){
                         printf("i=%d,j=%d,h=%d,k=%d for s=%ld\n",i,j,h,k,s);
                     }
@@ -137,10 +129,6 @@ int main(int argc, char **argv){
     globalN = 1800;
     globalI = 5;
     globalJ = 5;
-    
-    //double** matrixC = NULL;
-    //initMatrix(matrixC, globalN);
-    // TODO: Check how to distribute the result matrix.
     printf("Please enter number of processors:");
     scanf("%d", &numberOfProcessors);
     printf("\nPlease enter size of matrix:");
