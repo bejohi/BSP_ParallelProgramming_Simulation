@@ -10,6 +10,8 @@
 static unsigned int numberOfProcessors;
 
 static long globalN;
+static int globalI;
+static int globalJ;
 
 //static double** matrixC;
 
@@ -35,10 +37,16 @@ void bspEntrance(){
     long p= bsp_nprocs();
     long s= bsp_pid();
     long n = globalN;
-    bsp_push_reg(&n,sizeof(long));
+    int get_i = globalI;
+    int get_j = globalJ;
+    bsp_push_reg(&n,sizeof(int));
+    bsp_push_reg(&get_i,sizeof(int));
+    bsp_push_reg(&get_j,sizeof(int));
     bsp_sync();
 
     bsp_get(0,&n,0,&n,sizeof(long));
+    bsp_get(0,&get_i,0,&get_i,sizeof(int));
+    bsp_get(0,&get_j,0,&get_j,sizeof(int));
     bsp_sync();
     bsp_pop_reg(&n);
 
@@ -101,8 +109,11 @@ void bspEntrance(){
 
     bsp_sync();
     if(s==0){
-        printf("Calculations done in %.6lf seconds\n",timeEnd-timeStart);
+        printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
+
+
+
     // TODO: Make it possible to access the (i,j) cell and matching row
     // and colum.
 
@@ -119,6 +130,8 @@ int main(int argc, char **argv){
     bsp_init(bspEntrance, argc, argv);
     numberOfProcessors = 2;
     globalN = 10;
+    globalI = 5;
+    globalJ = 5;
     
     //double** matrixC = NULL;
     //initMatrix(matrixC, globalN);
@@ -126,7 +139,7 @@ int main(int argc, char **argv){
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
     }
-    printf("Start program with n=%ld,p=%d\n",globalN,numberOfProcessors);
+    printf("Start program with n=%ld,p=%d...\n",globalN,numberOfProcessors);
     bspEntrance();
 
     exit(EXIT_SUCCESS);
