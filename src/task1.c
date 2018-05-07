@@ -79,6 +79,7 @@ void bspEntrance(){
     }
 
     bsp_push_reg(pointerB,n*nrows*sizeof(double));
+    bsp_push_reg(pointerC,n*nrows*sizeof(double));
     bsp_sync();
 
     int i_prozessor = get_i / nrows;
