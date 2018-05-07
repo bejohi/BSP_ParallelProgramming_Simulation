@@ -130,14 +130,24 @@ void bspEntrance(){
 
 int main(int argc, char **argv){
     bsp_init(bspEntrance, argc, argv);
-    numberOfProcessors = 2;
-    globalN = 10;
+    numberOfProcessors = 1;
+    globalN = 1800;
     globalI = 5;
     globalJ = 5;
     
     //double** matrixC = NULL;
     //initMatrix(matrixC, globalN);
     // TODO: Check how to distribute the result matrix.
+    printf("Please enter number of processors:");
+    scanf("%d", &numberOfProcessors);
+    printf("\nPlease enter size of matrix:");
+    scanf("%d", &globalN);
+    printf("\nPlease enter i:");
+    scanf("%d", &globalI);
+    printf("\nPlease enter j:");
+    scanf("%d", &globalJ);
+    printf("\n");
+
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
     }
