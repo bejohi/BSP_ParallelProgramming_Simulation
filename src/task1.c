@@ -78,11 +78,23 @@ void bspEntrance(){
         }
     }
 
+    bsp_push_reg(pointerA,n*nrows*sizeof(double));
     bsp_push_reg(pointerB,n*nrows*sizeof(double));
     bsp_push_reg(pointerC,n*nrows*sizeof(double));
     bsp_sync();
 
     int i_prozessor = get_i / nrows;
+    int iRemote = get_i % nrows; 
+
+    bsp_get(i_prozessor,pointerA,iRemote*sizeof(double)*n,i_row,n*sizeof(double));
+    bsp_sync();
+
+    for(int localP = 0; localP < p;localP++){
+        for(int localN = 0; localN < nrows;localN++){
+            bsp_get(localP,pointerB,(localN*n+get_j)*sizeof(double),j_colum+localP*nrows+localN,sizeof(double));
+            bsp_sync();
+        }
+    }
 
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
