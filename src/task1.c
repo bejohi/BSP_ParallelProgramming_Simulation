@@ -137,7 +137,6 @@ void bspEntrance(){
         }
         printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
     }
-    bsp_sync();
     
     
 
