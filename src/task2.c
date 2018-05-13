@@ -100,6 +100,11 @@ void bspEntrance(){
 
     bsp_sync();
     double timeStart= bsp_time();
+
+    for(int i = 0; i < sqrt(p-1);i++){
+        
+    }
+
     do {
         for(int i = 0; i < nrows;i++){
             for(int h = k; h < k + n/p;h++){ // h or k
