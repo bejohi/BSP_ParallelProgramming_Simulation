@@ -127,8 +127,8 @@ void bspEntrance(){
     if(s==0){
         printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
-    /*
-    bsp_sync();
+    
+    //bsp_sync();
     if(s == 0){
         double result = -1;
         bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
@@ -138,8 +138,7 @@ void bspEntrance(){
         }
         printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
     }
-    bsp_sync();
-    */
+    //bsp_sync();
     
     
 
