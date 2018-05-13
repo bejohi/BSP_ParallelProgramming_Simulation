@@ -134,7 +134,7 @@ void bspEntrance(){
     if(s == 0){
         double result = 0;
         bsp_sync();
-        bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
+        //bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
         printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
     }
@@ -154,7 +154,7 @@ void bspEntrance(){
     free(localMatrixC);
     free(i_row);
     free(j_colum);
-    bsp_sync();
+
     bsp_end();
 }
 
