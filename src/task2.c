@@ -1,7 +1,7 @@
 #include "task2.h"
 
 
-#define DEBUG 0
+#define DEBUG 1
 #define DEEP_DEBUG 0
 
 /**
@@ -78,11 +78,27 @@ void bspEntrance(){
         }
     }
 
+    bsp_push_reg(pointerA,n*nrows*sizeof(double));
     bsp_push_reg(pointerB,n*nrows*sizeof(double));
+    bsp_push_reg(pointerC,n*nrows*sizeof(double));
     bsp_sync();
+
+    int i_prozessor = get_i / nrows;
+    int iRemote = get_i % nrows; 
+
+    bsp_get(i_prozessor,pointerA,iRemote*sizeof(double)*n,i_row,n*sizeof(double));
+    bsp_sync();
+
+    for(int localP = 0; localP < p;localP++){
+        for(int localN = 0; localN < nrows;localN++){
+            bsp_get(localP,pointerB,(localN*n+get_j)*sizeof(double),j_colum+localP*nrows+localN,sizeof(double));
+            bsp_sync();
+        }
+    }
 
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
+    bsp_sync();
     double timeStart= bsp_time();
     do {
         for(int i = 0; i < nrows;i++){
@@ -103,16 +119,24 @@ void bspEntrance(){
     } while(k != start);
 
     
+    bsp_sync();
     double timeEnd= bsp_time();
     if(DEBUG) printf("...calculations done for s=%ld\n",s);
 
 
 
-    bsp_sync();
     if(s==0){
         printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
 
+    if(s == 0){
+        double result = 0;
+        bsp_sync();
+        bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
+        bsp_sync();
+        printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
+    }
+    
     
 
 
@@ -127,6 +151,7 @@ void bspEntrance(){
     free(localMatrixC);
     free(i_row);
     free(j_colum);
+
     bsp_end();
 }
 
