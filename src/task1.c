@@ -138,7 +138,7 @@ void bspEntrance(){
         }
         printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
     }
-    //bsp_sync();
+    bsp_sync();
     
     
 
@@ -154,6 +154,7 @@ void bspEntrance(){
     free(localMatrixC);
     free(i_row);
     free(j_colum);
+    bsp_sync();
     bsp_end();
 }
 
