@@ -1,7 +1,7 @@
 #include "task1.h"
 
 
-#define DEBUG 0
+#define DEBUG 1
 #define DEEP_DEBUG 0
 
 /**
