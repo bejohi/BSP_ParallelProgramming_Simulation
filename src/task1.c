@@ -98,6 +98,7 @@ void bspEntrance(){
 
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
+    bsp_sync();
     double timeStart= bsp_time();
     do {
         for(int i = 0; i < nrows;i++){
@@ -118,6 +119,7 @@ void bspEntrance(){
     } while(k != start);
 
     
+    bsp_sync();
     double timeEnd= bsp_time();
     if(DEBUG) printf("...calculations done for s=%ld\n",s);
 
@@ -128,14 +130,12 @@ void bspEntrance(){
         printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
     
-    //bsp_sync();
+    bsp_sync();
     if(s == 0){
-        double result = -1;
+        double result = 0;
+        bsp_sync();
         bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
-        if(result == -1){
-            printf("ERROR 14\n");
-        }
         printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
     }
     bsp_sync();
