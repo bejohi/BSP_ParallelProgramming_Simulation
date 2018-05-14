@@ -140,7 +140,7 @@ void bspEntrance(){
         bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
         printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
-        printf("Sequ result=%d\n",sequ_result);
+        printf("Sequ result=%lf\n",sequ_result);
     }
 
     bsp_sync();
