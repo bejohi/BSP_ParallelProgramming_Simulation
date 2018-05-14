@@ -18,8 +18,8 @@ void matrixMultOldFashion(){
 
     bsp_begin(numberOfProcessors);
 
-    long p= bsp_nprocs();
-    long s= bsp_pid();
+    long p = bsp_nprocs();
+    long s = bsp_pid();
     long n = globalN;
     int get_i = globalI;
     int get_j = globalJ;
@@ -38,7 +38,7 @@ void matrixMultOldFashion(){
     bsp_pop_reg(&get_i);
     bsp_pop_reg(&get_j);
 
-    int start = n/numberOfProcessors * s;
+    int start = n/p * s;
     int end = n/p * (s+1);
     int k = start; 
     int nrows = end - start;
@@ -103,7 +103,7 @@ void matrixMultOldFashion(){
                 }
             }
         }
-        k = (k + n / numberOfProcessors) % n;
+        k = (k + n / p) % n;
         if(DEBUG) printf("Start distribution k=%d for s=%ld...\n",k,s);
         bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
         bsp_sync();
