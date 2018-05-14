@@ -130,19 +130,20 @@ void bspEntrance(){
     }
 
     if(s == 0){
+        double sequ_result = 0;
+        for(int x = 0; x < n; x++){
+            sequ_result += i_row[x] * j_colum[x];
+        }
+        
         double result = 0;
         bsp_sync();
         bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
-        printf("result for (%d,%d)= %lf\n",get_i,get_j,result);
+        printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
+        printf("Sequ result=%d\n",sequ_result);
     }
-    
-    
 
-
-    // TODO: Make it possible to access the (i,j) cell and matching row
-    // and colum.
-
+    bsp_sync();
     free(pointerA);
     free(pointerB);
     free(pointerC);
