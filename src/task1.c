@@ -131,17 +131,18 @@ void matrixMultOldFashion(){
         }
         
         
-       /* bsp_sync();
-        bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
+        
+        //bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
+        //bsp_sync();
         
         if(result != sequ_result){
             printf("CHECK FAILED!\n");
-            printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
-            printf("Sequ result=%lf\n",sequ_result);
+            if(DEBUG) printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
+            if(DEBUG) printf("Sequ result=%lf\n",sequ_result);
         } else {
             printf("Check okay.\n");
-        }*/
+        }
     }
 
     // Clean-Up
