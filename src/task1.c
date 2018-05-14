@@ -1,8 +1,9 @@
 #include "task1.h"
 
 
-#define DEBUG 1
+#define DEBUG 0
 #define DEEP_DEBUG 0
+#define REPORT_MODE 1
 
 static unsigned int numberOfProcessors;
 static long globalN;
@@ -165,13 +166,15 @@ int main(int argc, char **argv){
     globalJ = 5;
     printf("Please enter number of processors:");
     scanf("%d", &numberOfProcessors);
-    printf("\nPlease enter size of matrix:");
-    scanf("%ld", &globalN);
-    printf("\nPlease enter i:");
-    scanf("%d", &globalI);
-    printf("\nPlease enter j:");
-    scanf("%d", &globalJ);
-    printf("\n");
+    if(!REPORT_MODE){
+        printf("\nPlease enter size of matrix:");
+        scanf("%ld", &globalN);
+        printf("\nPlease enter i:");
+        scanf("%d", &globalI);
+        printf("\nPlease enter j:");
+        scanf("%d", &globalJ);
+        printf("\n");
+    }
 
     if(numberOfProcessors > bsp_nprocs()){
         numberOfProcessors = bsp_nprocs();
