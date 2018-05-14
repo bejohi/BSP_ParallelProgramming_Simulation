@@ -72,8 +72,8 @@ void bspEntrance(){
 
     for(int i = 0; i < nrows; i++){
         for(int y = 0; y < n; y++){
-            matrixA[i][y] = randfrom(0,100);
-            matrixB[i][y] = randfrom(0,100);
+            matrixA[i][y] = randfrom(1,100000000);
+            matrixB[i][y] = randfrom(1,100000000);
             localMatrixC[i][y] = 0;
         }
     }
