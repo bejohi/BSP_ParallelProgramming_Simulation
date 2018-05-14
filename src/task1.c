@@ -131,7 +131,7 @@ void matrixMultOldFashion(){
         }
         
         
-        bsp_sync();
+       /* bsp_sync();
         bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
         
@@ -141,7 +141,7 @@ void matrixMultOldFashion(){
             printf("Sequ result=%lf\n",sequ_result);
         } else {
             printf("Check okay.\n");
-        }
+        }*/
     }
 
     // Clean-Up
