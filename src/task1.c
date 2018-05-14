@@ -124,7 +124,7 @@ void matrixMultOldFashion(){
     // Verify result
     double sequ_result = 0;
     double result = 0;
-    
+
     if(s == 0){
         for(int x = 0; x < n; x++){
             sequ_result += i_row[x] * j_colum[x];
@@ -134,15 +134,15 @@ void matrixMultOldFashion(){
     }
 
     bsp_sync();
-    if(result != sequ_result){
-        printf("CHECK FAILED!\n");
-        if(DEBUG) printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
-        if(DEBUG) printf("Sequ result=%lf\n",sequ_result);
-    } else {
-        printf("Check okay.\n");
+    if(s == 0){
+        if(result != sequ_result){
+            printf("CHECK FAILED!\n");
+            if(DEBUG) printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
+            if(DEBUG) printf("Sequ result=%lf\n",sequ_result);
+        } else {
+            printf("Check okay.\n");
+        }
     }
-
-   
 
     // Clean-Up
     free(pointerA);
