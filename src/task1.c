@@ -4,29 +4,16 @@
 #define DEBUG 1
 #define DEEP_DEBUG 0
 
-/**
- * A global variable to define the number of processors.
- */ 
 static unsigned int numberOfProcessors;
-
 static long globalN;
 static int globalI;
 static int globalJ;
 
-//static double** matrixC;
-
-// TODO: Check if this works.
-double inline randfrom(double min, double max) 
-{
-    double range = (max - min); 
-    double div = RAND_MAX / range;
-    return min + (rand() / div);
-}
 
 /**
  * This method will run on every machine.
  */
-void bspEntrance(){
+void matrixMultOldFashion(){
 
     bsp_begin(numberOfProcessors);
 
@@ -71,10 +58,11 @@ void bspEntrance(){
         localMatrixC[i] = pointerC + i*n;
     }
 
+    srand(time(NULL)*s);
     for(int i = 0; i < nrows; i++){
         for(int y = 0; y < n; y++){
-            matrixA[i][y] = randfrom(1,100000000);
-            matrixB[i][y] = randfrom(1,100000000);
+            matrixA[i][y] = (double)rand()/(double)(RAND_MAX);
+            matrixB[i][y] = (double)rand()/(double)(RAND_MAX);
             localMatrixC[i][y] = 0;
         }
     }
@@ -170,7 +158,7 @@ void bspEntrance(){
 }
 
 int main(int argc, char **argv){
-    bsp_init(bspEntrance, argc, argv);
+    bsp_init(matrixMultOldFashion, argc, argv);
     numberOfProcessors = 1;
     globalN = 1800;
     globalI = 5;
@@ -189,7 +177,7 @@ int main(int argc, char **argv){
         numberOfProcessors = bsp_nprocs();
     }
     printf("Start program with n=%ld,p=%d...\n",globalN,numberOfProcessors);
-    bspEntrance();
+    matrixMultOldFashion();
 
     exit(EXIT_SUCCESS);
 }
