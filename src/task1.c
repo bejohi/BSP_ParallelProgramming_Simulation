@@ -131,8 +131,8 @@ void matrixMultOldFashion(){
         }
         
         
-        //bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
-        //bsp_sync();
+        bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
+        bsp_sync();
         
         if(result != sequ_result){
             printf("CHECK FAILED!\n");
