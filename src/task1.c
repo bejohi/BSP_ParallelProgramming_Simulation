@@ -30,12 +30,13 @@ void bspEntrance(){
 
     bsp_begin(numberOfProcessors);
 
-    // Distribution between processors.
     long p= bsp_nprocs();
     long s= bsp_pid();
     long n = globalN;
     int get_i = globalI;
     int get_j = globalJ;
+
+    // Distribution
     bsp_push_reg(&n,sizeof(long));
     bsp_push_reg(&get_i,sizeof(int));
     bsp_push_reg(&get_j,sizeof(int));
@@ -51,7 +52,7 @@ void bspEntrance(){
 
     int start = n/numberOfProcessors * s;
     int end = n/p * (s+1);
-    int k = start;
+    int k = start; 
     int nrows = end - start;
 
     // Matrix init
@@ -86,6 +87,7 @@ void bspEntrance(){
     int i_prozessor = get_i / nrows;
     int iRemote = get_i % nrows; 
 
+    // Collect the i-th row and j-colum
     bsp_get(i_prozessor,pointerA,iRemote*sizeof(double)*n,i_row,n*sizeof(double));
     bsp_sync();
 
@@ -98,6 +100,7 @@ void bspEntrance(){
 
     if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
 
+    // Algorithm begin
     bsp_sync();
     double timeStart= bsp_time();
     do {
@@ -124,30 +127,35 @@ void bspEntrance(){
     if(DEBUG) printf("...calculations done for s=%ld\n",s);
 
 
-
+    bsp_sync();
     if(s==0){
         printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
 
+    // Verify result
     if(s == 0){
         double sequ_result = 0;
+        double result = 0;
+
         for(int x = 0; x < n; x++){
             sequ_result += i_row[x] * j_colum[x];
         }
         
-        double result = 0;
+        
         bsp_sync();
         bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double));
         bsp_sync();
-        if(DEBUG) printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
-        if(DEBUG) printf("Sequ result=%lf\n",sequ_result);
+        
         if(result != sequ_result){
             printf("CHECK FAILED!\n");
             printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
             printf("Sequ result=%lf\n",sequ_result);
+        } else {
+            printf("Check okay.\n");
         }
     }
 
+    // Clean-Up
     bsp_sync();
     free(pointerA);
     free(pointerB);
