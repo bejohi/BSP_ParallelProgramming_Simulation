@@ -131,8 +131,6 @@ void matrixMultOldFashion(){
         }
         
         
-        bsp_sync();
-        
         //bsp_get(i_prozessor,pointerC, ((get_i % nrows) * n + get_j) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
         //bsp_sync();
         
@@ -146,7 +144,6 @@ void matrixMultOldFashion(){
     }
 
     // Clean-Up
-    bsp_sync();
     free(pointerA);
     free(pointerB);
     free(pointerC);
