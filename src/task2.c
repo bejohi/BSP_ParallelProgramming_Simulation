@@ -129,7 +129,7 @@ void cannonMatrixMult(){
     double sequ_result = 0;
     double result = 0;
 
-    if(processorId == 0){
+   /* if(processorId == 0){
         for(int x = 0; x < n; x++){
             sequ_result += iRow[x] * jColum[x];
         }
@@ -146,7 +146,7 @@ void cannonMatrixMult(){
         } else {
             printf("Check okay.\n");
         }
-    }
+    }*/
 
     // Clean-Up
     free(pointerA);
