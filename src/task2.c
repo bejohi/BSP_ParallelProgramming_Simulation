@@ -1,7 +1,7 @@
 #include "task2.h"
 
 
-#define DEBUG 0
+#define DEBUG 1
 #define DEEP_DEBUG 0
 #define REPORT_MODE 1
 
@@ -40,13 +40,12 @@ void cannonMatrixMult(){
 
     int start = (int) (n / numberOfProcessors * processorId);
     int end = (int) (n / numberOfProcessors * (processorId + 1));
-    int k = start; 
     int nrows = end - start;
 
     // Matrix init
-    double* pointerA = (double*) malloc(sizeof(double)*n*nrows);
-    double* pointerB = (double*) malloc(sizeof(double)*n*nrows);
-    double* pointerC = (double*) malloc(sizeof(double)*n*nrows);
+    double* pointerA = (double*) malloc(sizeof(double)*nrows*nrows);
+    double* pointerB = (double*) malloc(sizeof(double)*nrows*nrows);
+    double* pointerC = (double*) malloc(sizeof(double)*nrows*nrows);
     double** matrixA = (double**) malloc(sizeof(double*) * nrows);
     double** matrixB = (double**) malloc(sizeof(double*) * nrows);
     double** matrixC = (double**) malloc(sizeof(double*) * nrows);
@@ -75,14 +74,19 @@ void cannonMatrixMult(){
 
     int i_prozessor = iToCheck / nrows;
     int iRemote = iToCheck % nrows;
+    int s = (int) sqrt(numberOfProcessors);
 
     // Collect the i-th row and j-colum
-    bsp_get(i_prozessor,pointerA,iRemote*sizeof(double)*n,iRow,n*sizeof(double));
+    
     bsp_sync();
 
-    for(int localP = 0; localP < numberOfProcessors;localP++){
+    for(int localP = 0; localP < s;localP++){
+        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*n,iRow,nrows*sizeof(double));
+    }
+
+    for(int localP = 0; localP < s;localP++){
         for(int localN = 0; localN < nrows;localN++){
-            bsp_get(localP,pointerB,(localN*n+jToCheck)*sizeof(double),jColum+localP*nrows+localN,sizeof(double));
+            bsp_get(localP*s+jToCheck/nrows,pointerB,(localN*n+jToCheck)*sizeof(double),jColum+localP*nrows+localN,sizeof(double));
             bsp_sync();
         }
     }
@@ -94,7 +98,7 @@ void cannonMatrixMult(){
 
 
 
-    int s = (int) sqrt(numberOfProcessors); // TODO: what is in case numberOfProcessors = 1? Is this realy correct?
+     // TODO: what is in case numberOfProcessors = 1? Is this realy correct?
     double timeStart= bsp_time();
 
     // TODO: Maybe skip step 0 of matrix multiplication.
@@ -129,7 +133,7 @@ void cannonMatrixMult(){
     double sequ_result = 0;
     double result = 0;
 
-   /* if(processorId == 0){
+    if(processorId == 0){
         for(int x = 0; x < n; x++){
             sequ_result += iRow[x] * jColum[x];
         }
@@ -142,11 +146,11 @@ void cannonMatrixMult(){
         if(result != sequ_result){
             printf("CHECK FAILED!\n");
             if(DEBUG) printf("Parallel result for (%d,%d)= %lf\n",iToCheck,jToCheck,result);
-            if(DEBUG) printf("Sequ result=%lf\n",sequ_result);
+            if(DEBUG) printf("Senrowsu result=%lf\n",sequ_result);
         } else {
             printf("Check okay.\n");
         }
-    }*/
+    }
 
     // Clean-Up
     free(pointerA);
