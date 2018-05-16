@@ -80,9 +80,9 @@ void cannonMatrixMult(){
 
     if(DEBUG) printf("...fill done for  processorId=%d\n",processorId);
 
-    bsp_push_reg(pointerA,n*nrows*sizeof(double));
-    bsp_push_reg(pointerB,n*nrows*sizeof(double));
-    bsp_push_reg(pointerC,n*nrows*sizeof(double));
+    bsp_push_reg(pointerA,nrows*nrows*sizeof(double));
+    bsp_push_reg(pointerB,nrows*nrows*sizeof(double));
+    bsp_push_reg(pointerC,nrows*nrows*sizeof(double));
     bsp_sync();
 
     int s = (int) sqrt(numberOfProcessors);
