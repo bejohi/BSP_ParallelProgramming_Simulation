@@ -125,8 +125,8 @@ void cannonMatrixMult(){
 
     // TODO: Build initial shift
 
-    int ii = (processorId % s);
-    int jj = (processorId / s);
+    int jj = (processorId % s);
+    int ii = (processorId / s);
 
     unsigned int downId = (processorId + ii * s) % numberOfProcessors;
 
