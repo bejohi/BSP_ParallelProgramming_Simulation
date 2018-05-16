@@ -81,9 +81,10 @@ void cannonMatrixMult(){
     bsp_push_reg(pointerC,n*nrows*sizeof(double));
     bsp_sync();
 
-    int iProcessor = iToCheck / nrows;
-    int iRemote = iToCheck % nrows;
     int s = (int) sqrt(numberOfProcessors);
+    int iProcessor = iToCheck / nrows * s + jToCheck / nrows;
+    int iRemote = iToCheck % nrows;
+
 
     // Collect the i-th row and j-colum
     
@@ -171,6 +172,8 @@ void cannonMatrixMult(){
             if(DEBUG) printf("Sequential result for (%d,%d)=%lf\n",iToCheck,jToCheck,sequ_result);
         } else {
             printf("Check okay.\n");
+            if(DEBUG) printf("Parallel result for (%d,%d)=%lf\n",iToCheck,jToCheck,result);
+            if(DEBUG) printf("Sequential result for (%d,%d)=%lf\n",iToCheck,jToCheck,sequ_result);
         }
     }
 
