@@ -102,7 +102,7 @@ void cannonMatrixMult(){
     }
 
     if(DEBUG) printf("...iRow init done for processorId=%d\n",processorId);
-
+    bsp_sync();
     for(int localP = 0; localP < s; localP++){
         for(int localN = 0; localN < nrows;localN++){
             if(DEEP_DEBUG) printf("localP=%d localN=%d for processorId=%d\n",localP,localN,processorId);
