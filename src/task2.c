@@ -23,6 +23,7 @@ void cannonMatrixMult(){
     long n = globalN;
     int iToCheck = globalI;
     int jToCheck = globalJ;
+    int s = (int) sqrt(numberOfProcessors);
 
     // Distribution
     bsp_push_reg(&n,sizeof(long));
@@ -41,9 +42,8 @@ void cannonMatrixMult(){
 
     if(DEBUG) printf("...distribution for processorId=%d\n",processorId);
 
-    int start = (int) (n / numberOfProcessors * processorId);
-    int end = (int) (n / numberOfProcessors * (processorId + 1));
-    int nrows = end - start;
+
+    int nrows = n / s;
 
     // Matrix init
     double* pointerA = (double*) malloc(sizeof(double)*nrows*nrows);
@@ -87,7 +87,6 @@ void cannonMatrixMult(){
 
     if(DEBUG) printf("...push done for processorId=%d\n",processorId);
 
-    int s = (int) sqrt(numberOfProcessors);
     int iProcessor = iToCheck / nrows * s + jToCheck / nrows;
     int iRemote = iToCheck % nrows;
 
