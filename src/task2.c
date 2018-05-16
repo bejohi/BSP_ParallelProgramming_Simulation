@@ -23,8 +23,7 @@ void cannonMatrixMult(){
     long n = globalN;
     int iToCheck = globalI;
     int jToCheck = globalJ;
-    int s = (int) sqrt(numberOfProcessors);
-    int nrows = (int) (n / s);
+
 
     // Distribution
     bsp_push_reg(&n,sizeof(long));
@@ -40,6 +39,9 @@ void cannonMatrixMult(){
     bsp_pop_reg(&iToCheck);
     bsp_pop_reg(&jToCheck);
 
+
+    int s = (int) sqrt(numberOfProcessors);
+    int nrows = (int) (n / s);
 
     if(DEEP_DEBUG) printf("...distribution for processorId=%d\n",processorId);
 
