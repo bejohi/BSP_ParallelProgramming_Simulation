@@ -158,6 +158,7 @@ void cannonMatrixMult(){
 
     if(processorId == 0){
         for(int x = 0; x < n; x++){
+            if(DEEP_DEBUG) printf("iRow[%d]=%lf done jColum[%d]=%lf\n",x,iRow[x],x,jColum[x]);
             sequ_result += iRow[x] * jColum[x];
         }
         bsp_get(iProcessor,pointerC, ((iToCheck % nrows) * nrows + jToCheck) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
