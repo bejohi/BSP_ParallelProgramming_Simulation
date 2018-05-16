@@ -95,12 +95,15 @@ void cannonMatrixMult(){
     bsp_sync();
 
     for(int localP = 0; localP < s;localP++){
-        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*nrows,iRow+localP*nrows,nrows*sizeof(double));
+        //bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*nrows,iRow+localP*nrows,nrows*sizeof(double));
+        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*n,iRow,nrows*sizeof(double));
+        bsp_sync();
     }
 
     for(int localP = 0; localP < s;localP++){
         for(int localN = 0; localN < nrows;localN++){
-            bsp_get(localP*s+jToCheck/nrows,pointerB,(localN*nrows+jToCheck)*sizeof(double),jColum+localP*nrows+localN,sizeof(double));
+            //bsp_get(localP*s+jToCheck/nrows,pointerB,(localN*nrows+jToCheck)*sizeof(double),jColum+localP*nrows+localN,sizeof(double));
+            bsp_get(localP*s+jToCheck/nrows,pointerB,(localN*n+jToCheck)*sizeof(double),jColum+localP*nrows+localN,sizeof(double));
             bsp_sync();
         }
     }
