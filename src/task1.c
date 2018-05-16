@@ -6,7 +6,7 @@
 #define REPORT_MODE 1
 
 static unsigned int numberOfProcessors;
-static long globalN;
+static int globalN;
 static int globalI;
 static int globalJ;
 
@@ -18,9 +18,9 @@ void matrixMultOldFashion(){
 
     bsp_begin(numberOfProcessors);
 
-    long p = bsp_nprocs();
-    long s = bsp_pid();
-    long n = globalN;
+    int p = bsp_nprocs();
+    int processorId = bsp_pid();
+    int n = globalN;
     int get_i = globalI;
     int get_j = globalJ;
 
@@ -38,10 +38,10 @@ void matrixMultOldFashion(){
     bsp_pop_reg(&get_i);
     bsp_pop_reg(&get_j);
 
-    int start = n/p * s;
-    int end = n/p * (s+1);
-    int k = start; 
-    int nrows = end - start;
+    int start = n/p * processorId;
+    int end = n/p * (processorId+1);
+    int k = start;
+    int nrows = end - start;  // == n/p
 
     // Matrix init
     double* pointerA = (double*) malloc(sizeof(double)*n*nrows);
@@ -59,7 +59,7 @@ void matrixMultOldFashion(){
         localMatrixC[i] = pointerC + i*n;
     }
 
-    srand(time(NULL)*s);
+    srand((unsigned int) (time(NULL) * processorId));
     for(int i = 0; i < nrows; i++){
         for(int y = 0; y < n; y++){
             matrixA[i][y] = (double)rand()/(double)(RAND_MAX);
@@ -87,7 +87,7 @@ void matrixMultOldFashion(){
         }
     }
 
-    if(DEBUG) printf("...Matrix init done for s=%ld\n",s);
+    if(DEBUG) printf("...Matrix init done for processorId=%ld\n",processorId);
 
     // Algorithm begin
     bsp_sync();
@@ -97,27 +97,31 @@ void matrixMultOldFashion(){
             for(int h = k; h < k + n/p;h++){ // h or k
                 for(int j = 0; j < n; j++){
                     if(DEEP_DEBUG){
-                        printf("i=%d,j=%d,h=%d,k=%d for s=%ld\n",i,j,h,k,s);
+                        printf("i=%d,j=%d,h=%d,k=%d for processorId=%ld\n",i,j,h,k,processorId);
                     }
                     localMatrixC[i][j] += matrixA[i][h] * matrixB[h-k][j];
                 }
             }
         }
-        k = (k + n / p) % n;
-        if(DEBUG) printf("Start distribution k=%d for s=%ld...\n",k,s);
-        bsp_get((s+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
+        k = (k + nrows) % n;
+
+
+        if(DEBUG) printf("Start distribution k=%d for processorId=%ld...\n",k,processorId);
+
+        // %p to shift the matrix to processor 0 in case processorId+1 == p
+        bsp_get((processorId+1)%p,pointerB,0,pointerB,n*nrows*sizeof(double));
         bsp_sync();
-        if(DEBUG) printf("...distribution k=%d for s=%ld done...\n",k,s);
+        if(DEBUG) printf("...distribution k=%d for processorId=%ld done...\n",k,processorId);
     } while(k != start);
 
     
     bsp_sync();
     double timeEnd= bsp_time();
-    if(DEBUG) printf("...calculations done for s=%ld\n",s);
+    if(DEBUG) printf("...calculations done for processorId=%ld\n",processorId);
 
 
     bsp_sync();
-    if(s==0){
+    if(processorId==0){
         printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
 
@@ -125,7 +129,7 @@ void matrixMultOldFashion(){
     double sequ_result = 0;
     double result = 0;
 
-    if(s == 0){
+    if(processorId == 0){
         for(int x = 0; x < n; x++){
             sequ_result += i_row[x] * j_colum[x];
         }
@@ -134,7 +138,7 @@ void matrixMultOldFashion(){
     }
 
     bsp_sync();
-    if(s == 0){
+    if(processorId == 0){
         if(result != sequ_result){
             printf("CHECK FAILED!\n");
             if(DEBUG) printf("Parallel result for (%d,%d)= %lf\n",get_i,get_j,result);
