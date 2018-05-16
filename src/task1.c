@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
 
     if (!REPORT_MODE) {
         printf("\nPlease enter size of matrix:");
-        scanf("%ld", &globalN);
+        scanf("%d", &globalN);
 
         printf("\nPlease enter i:");
         scanf("%d", &globalI);
@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
     if (numberOfProcessors > bsp_nprocs()) {
         numberOfProcessors = bsp_nprocs();
     }
-    printf("Start program with n=%ld,p=%d...\n", globalN, numberOfProcessors);
+    printf("Start program with n=%d,p=%d...\n", globalN, numberOfProcessors);
     matrixMultOldFashion();
 
     exit(EXIT_SUCCESS);
