@@ -39,7 +39,7 @@ void cannonMatrixMult(){
     bsp_pop_reg(&jToCheck);
 
 
-    if(DEBUG) printf("...distribution for processorId=%ld\n",processorId);
+    if(DEBUG) printf("...distribution for processorId=%d\n",processorId);
 
     int start = (int) (n / numberOfProcessors * processorId);
     int end = (int) (n / numberOfProcessors * (processorId + 1));
@@ -55,7 +55,7 @@ void cannonMatrixMult(){
     double* iRow = (double*) malloc(sizeof(double)*n);
     double* jColum = (double*) malloc(sizeof(double)*n);
 
-    if(DEBUG) printf("...allocation done for processorId=%ld\n",processorId);
+    if(DEBUG) printf("...allocation done for processorId=%d\n",processorId);
 
     for(int i = 0; i < nrows; i++){
         matrixA[i] = pointerA + i*nrows;
@@ -63,7 +63,7 @@ void cannonMatrixMult(){
         matrixC[i] = pointerC + i*nrows;
     }
 
-    if(DEBUG) printf("...SUB allocation done for  processorId=%ld\n",processorId);
+    if(DEBUG) printf("...SUB allocation done for  processorId=%d\n",processorId);
 
     srand((unsigned int) (time(NULL) * processorId));
     for(int i = 0; i < nrows; i++){
@@ -74,7 +74,7 @@ void cannonMatrixMult(){
         }
     }
 
-    if(DEBUG) printf("...fill done for  processorId=%ld\n",processorId);
+    if(DEBUG) printf("...fill done for  processorId=%d\n",processorId);
 
     bsp_push_reg(pointerA,n*nrows*sizeof(double));
     bsp_push_reg(pointerB,n*nrows*sizeof(double));
@@ -100,7 +100,7 @@ void cannonMatrixMult(){
         }
     }
     
-    if(DEBUG) printf("...Matrix init done for processorId=%ld\n",processorId);
+    if(DEBUG) printf("...Matrix init done for processorId=%d\n",processorId);
 
     // Algorithm begin
     bsp_sync();
@@ -130,7 +130,7 @@ void cannonMatrixMult(){
     
     bsp_sync();
     double timeEnd= bsp_time();
-    if(DEBUG) printf("...calculations done for processorId=%ld\n",processorId);
+    if(DEBUG) printf("...calculations done for processorId=%d\n",processorId);
 
 
     bsp_sync();
