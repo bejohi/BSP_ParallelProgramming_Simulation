@@ -2,8 +2,8 @@
 
 
 #define DEBUG 1
-#define DEEP_DEBUG 0
-#define REPORT_MODE 1
+#define DEEP_DEBUG 1
+#define REPORT_MODE 0
 
 static unsigned int numberOfProcessors;
 static long globalN;
@@ -122,10 +122,14 @@ void cannonMatrixMult(){
                 }
             }
         }
+        if(DEEP_DEBUG) printf("iteration %d start for processorId=%d\n",iteration, processorId);
+
         int downId = ((processorId + s) % numberOfProcessors);
         int rightId = processorId / s == s-1 ? (processorId - s + 1) : processorId + 1;
         bsp_get(downId,pointerA,0,pointerA,sizeof(double) * nrows * nrows);
         bsp_get(rightId,pointerB,0,pointerB,sizeof(double) * nrows * nrows);
+        
+        if(DEEP_DEBUG) printf("iteration %d done for processorId=%d\n",iteration, processorId);
     }
     
     bsp_sync();
