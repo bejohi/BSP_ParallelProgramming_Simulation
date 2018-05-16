@@ -125,14 +125,18 @@ void cannonMatrixMult(){
 
     // TODO: Build initial shift
 
-    int jj = (processorId % s);
-    int ii = (processorId / s);
+    int ii = (processorId % s);
+    int jj = (processorId / s);
 
     unsigned int downId = (processorId + ii * s) % numberOfProcessors;
 
     unsigned int rightId = processorId / s == s-1 ? processorId - s + jj : processorId + jj;
+
     bsp_get(downId,pointerB,0,pointerB, sizeof(double) * nrows * nrows);
+    if(DEBUG) printf("...pointerB movement done for processorId=%d\n",processorId);
     bsp_get(rightId,pointerA,0,pointerA, sizeof(double) * nrows * nrows);
+    if(DEBUG) printf("...pointerA movement done for processorId=%d\n",processorId);
+    bsp_sync();
 
     for(int iteration = 0; iteration < s; iteration++){
 
