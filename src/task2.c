@@ -85,6 +85,8 @@ void cannonMatrixMult(){
     bsp_push_reg(pointerC,nrows*nrows*sizeof(double));
     bsp_sync();
 
+    if(DEBUG) printf("...push done for processorId=%d\n",processorId);
+
     int s = (int) sqrt(numberOfProcessors);
     int iProcessor = iToCheck / nrows * s + jToCheck / nrows;
     int iRemote = iToCheck % nrows;
@@ -100,6 +102,8 @@ void cannonMatrixMult(){
         bsp_sync();
     }
 
+    if(DEBUG) printf("...iRow init done for processorId=%d\n",processorId);
+
     for(int localP = 0; localP < s;localP++){
         for(int localN = 0; localN < nrows;localN++){
             //bsp_get(localP*s+jToCheck/nrows,pointerB,(localN*nrows+jToCheck)*sizeof(double),jColum+localP*nrows+localN,sizeof(double));
@@ -107,7 +111,8 @@ void cannonMatrixMult(){
             bsp_sync();
         }
     }
-    
+
+    if(DEBUG) printf("...jColum init done for processorId=%d\n",processorId);
     if(DEBUG) printf("...Matrix init done for processorId=%d\n",processorId);
 
     // Algorithm begin
