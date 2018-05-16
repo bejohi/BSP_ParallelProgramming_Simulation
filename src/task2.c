@@ -60,7 +60,7 @@ void cannonMatrixMult(){
 
     srand((unsigned int) (time(NULL) * processorId));
     for(int i = 0; i < nrows; i++){
-        for(int y = 0; y < n; y++){
+        for(int y = 0; y < nrows; y++){
             matrixA[i][y] = (double)rand()/(double)(RAND_MAX);
             matrixB[i][y] = (double)rand()/(double)(RAND_MAX);
             matrixC[i][y] = 0;
@@ -72,7 +72,7 @@ void cannonMatrixMult(){
     bsp_push_reg(pointerC,n*nrows*sizeof(double));
     bsp_sync();
 
-    int i_prozessor = iToCheck / nrows;
+    int iProcessor = iToCheck / nrows;
     int iRemote = iToCheck % nrows;
     int s = (int) sqrt(numberOfProcessors);
 
@@ -137,7 +137,7 @@ void cannonMatrixMult(){
         for(int x = 0; x < n; x++){
             sequ_result += iRow[x] * jColum[x];
         }
-        bsp_get(i_prozessor,pointerC, ((iToCheck % nrows) * n + jToCheck) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
+        bsp_get(iProcessor,pointerC, ((iToCheck % nrows) * n + jToCheck) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
         
     }
 
