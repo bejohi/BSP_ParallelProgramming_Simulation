@@ -123,13 +123,16 @@ void cannonMatrixMult(){
 
     double timeStart= bsp_time();
 
-    // TODO: Maybe skip step 0 of matrix multiplication.
+    // TODO: Build initial shift
 
-    unsigned int downId = (processorId + (processorId % s) * s) % numberOfProcessors;
-    unsigned int rightId = processorId / s == s-1 ? processorId - s + (processorId / s)
-                                                  : processorId + (processorId / s);
-    bsp_get(downId,pointerA,0,pointerA,sizeof(double) * nrows * nrows);
-    bsp_get(rightId,pointerB,0,pointerB,sizeof(double) * nrows * nrows);
+    int ii = (processorId % s);
+    int jj = (processorId / s);
+
+    unsigned int downId = (processorId + ii * s) % numberOfProcessors;
+
+    unsigned int rightId = processorId / s == s-1 ? processorId - s + jj : processorId + jj;
+    bsp_get(downId,pointerB,0,pointerB, sizeof(double) * nrows * nrows);
+    bsp_get(rightId,pointerA,0,pointerA, sizeof(double) * nrows * nrows);
 
     for(int iteration = 0; iteration < s; iteration++){
 
