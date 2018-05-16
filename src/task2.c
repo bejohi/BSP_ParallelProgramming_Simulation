@@ -1,7 +1,7 @@
 #include "task2.h"
 
 
-#define DEBUG 1
+#define DEBUG 0
 #define DEEP_DEBUG 0
 #define REPORT_MODE 0
 
@@ -95,7 +95,17 @@ void cannonMatrixMult(){
 
 
     // Collect the i-th row and j-colum
-    
+    for(int localP = 0; localP < s; localP++){
+        for(int localN = 0; localN < nrows;localN++){
+            if(DEEP_DEBUG) printf("localP=%d localN=%d for processorId=%d\n",localP,localN,processorId);
+            // (localN*n+get_j)*sizeof(double)
+            bsp_get((const unsigned int) (localP * s + jToCheck / nrows), pointerB,
+                    (localN * nrows + jToCheck) * sizeof(double), jColum + localP * nrows + localN, sizeof(double));
+            bsp_sync();
+        }
+    }
+
+
     bsp_sync();
 
     for(int localP = 0; localP < s;localP++){
@@ -165,23 +175,13 @@ void cannonMatrixMult(){
         printf("...calculations done in %.6lf seconds\n",timeEnd-timeStart);
     }
 
-    for(int localP = 0; localP < s; localP++){
-        for(int localN = 0; localN < nrows;localN++){
-            if(DEEP_DEBUG) printf("localP=%d localN=%d for processorId=%d\n",localP,localN,processorId);
-            // (localN*n+get_j)*sizeof(double)
-            bsp_get((const unsigned int) (localP * s + jToCheck / nrows), pointerB,
-                    (localN * nrows + jToCheck) * sizeof(double), jColum + localP * nrows + localN, sizeof(double));
-            bsp_sync();
-        }
-    }
-
     // Verify result
     double sequ_result = 0;
     double result = 0;
 
     if(processorId == 0){
         for(int x = 0; x < n; x++){
-            if(DEEP_DEBUG) printf("iRow[%d]=%lf done jColum[%d]=%lf\n",x,iRow[x],x,jColum[x]);
+            if(!REPORT_MODE) printf("iRow[%d]=%lf jColum[%d]=%lf\n",x,iRow[x],x,jColum[x]);
             sequ_result += iRow[x] * jColum[x];
         }
         bsp_get(iProcessor,pointerC, ((iToCheck % nrows) * nrows + jToCheck) * sizeof(double),&result,sizeof(double));
