@@ -133,7 +133,7 @@ void matrixMultOldFashion() {
 
     if (processorId == 0) {
         for (int x = 0; x < n; x++) {
-            if(!REPORT_MODE) printf("iRow[%d]=%lf jColum[%d]=%lf",x,iRow[x],x,jColum[x]);
+            if(!REPORT_MODE) printf("iRow[%d]=%lf jColum[%d]=%lf\n",x,iRow[x],x,jColum[x]);
             sequ_result += iRow[x] * jColum[x];
         }
         bsp_get(iLocal, pointerC, ((iToCheck % nrows) * n + jToCheck) * sizeof(double), &result,
