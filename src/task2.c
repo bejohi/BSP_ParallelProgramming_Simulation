@@ -152,8 +152,8 @@ void cannonMatrixMult(){
     }
 
     // Verify result
-    double sequ_result = -2;
-    double result = -1;
+    double sequ_result = 0;
+    double result = 0;
 
     if(processorId == 0){
         for(int x = 0; x < n; x++){
