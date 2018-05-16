@@ -24,6 +24,7 @@ void cannonMatrixMult(){
     int iToCheck = globalI;
     int jToCheck = globalJ;
     int s = (int) sqrt(numberOfProcessors);
+    int nrows = (int) (n / s);
 
     // Distribution
     bsp_push_reg(&n,sizeof(long));
@@ -43,7 +44,7 @@ void cannonMatrixMult(){
     if(DEEP_DEBUG) printf("...distribution for processorId=%d\n",processorId);
 
 
-    int nrows = (int) (n / s);
+
 
     // Matrix init
     double* pointerA = (double*) malloc(sizeof(double)*nrows*nrows);
@@ -96,7 +97,8 @@ void cannonMatrixMult(){
     bsp_sync();
 
     for(int localP = 0; localP < s;localP++){
-        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*nrows,iRow+localP*nrows,nrows*sizeof(double));
+        bsp_get((const unsigned int) (localP + s * iToCheck / nrows), pointerA,
+                iRemote * sizeof(double) * nrows, iRow + localP * nrows, nrows * sizeof(double));
         bsp_sync();
     }
 
@@ -106,7 +108,8 @@ void cannonMatrixMult(){
         for(int localN = 0; localN < nrows;localN++){
             if(DEEP_DEBUG) printf("localP=%d localN=%d for processorId=%d\n",localP,localN,processorId);
             // (localN*n+get_j)*sizeof(double)
-            bsp_get(localP*s+jToCheck/nrows,pointerB,(localN*nrows+jToCheck)*sizeof(double),jColum+localP*nrows+localN,sizeof(double));
+            bsp_get((const unsigned int) (localP * s + jToCheck / nrows), pointerB,
+                    (localN * nrows + jToCheck) * sizeof(double), jColum + localP * nrows + localN, sizeof(double));
             bsp_sync();
         }
     }
@@ -118,11 +121,15 @@ void cannonMatrixMult(){
     bsp_sync();
 
 
-
-     // TODO: what is in case numberOfProcessors = 1? Is this realy correct?
     double timeStart= bsp_time();
 
     // TODO: Maybe skip step 0 of matrix multiplication.
+
+    unsigned int downId = (processorId + (processorId % s) * s) % numberOfProcessors;
+    unsigned int rightId = processorId / s == s-1 ? processorId - s + (processorId / s)
+                                                  : processorId + (processorId / s);
+    bsp_get(downId,pointerA,0,pointerA,sizeof(double) * nrows * nrows);
+    bsp_get(rightId,pointerB,0,pointerB,sizeof(double) * nrows * nrows);
 
     for(int iteration = 0; iteration < s; iteration++){
 
@@ -134,19 +141,12 @@ void cannonMatrixMult(){
                 }
             }
         }
-        
 
-        int downId = ((processorId + s) % numberOfProcessors);
-        int rightId;
-        if(processorId / s == s-1){
-            rightId = processorId - s + 1;
-            if(DEEP_DEBUG) printf("special case with rightId for processorId=%d\n",processorId);
-        } else {
-            rightId = processorId + 1;
-        }
+
 
         if(DEEP_DEBUG) printf("iteration %d start for processorId=%d, downId=%d, rightId=%d\n",iteration, processorId,downId,rightId);
-
+        downId = ((processorId + s) % numberOfProcessors);
+        rightId = processorId / s == s-1 ? processorId - s + 1 : processorId + 1;;
         bsp_get(downId,pointerA,0,pointerA,sizeof(double) * nrows * nrows);
         bsp_get(rightId,pointerB,0,pointerB,sizeof(double) * nrows * nrows);
 
@@ -172,7 +172,7 @@ void cannonMatrixMult(){
             if(DEEP_DEBUG) printf("iRow[%d]=%lf done jColum[%d]=%lf\n",x,iRow[x],x,jColum[x]);
             sequ_result += iRow[x] * jColum[x];
         }
-        bsp_get(iProcessor,pointerC, ((iToCheck % nrows) * nrows + jToCheck) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
+        bsp_get(iProcessor,pointerC, ((iToCheck % nrows) * nrows + jToCheck) * sizeof(double),&result,sizeof(double));
         
     }
 
