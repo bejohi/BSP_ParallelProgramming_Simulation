@@ -65,6 +65,10 @@ void cannonMatrixMult(){
 
     if(DEBUG) printf("...SUB allocation done for  processorId=%d\n",processorId);
 
+    if(processorId == 0){
+        if(DEBUG) printf("...nrows=%d\n",nrows);
+    }
+
     srand((unsigned int) (time(NULL) * processorId));
     for(int i = 0; i < nrows; i++){
         for(int y = 0; y < nrows; y++){
@@ -91,7 +95,7 @@ void cannonMatrixMult(){
     bsp_sync();
 
     for(int localP = 0; localP < s;localP++){
-        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*nrows,iRow+localP*nrows*nrows,nrows*sizeof(double));
+        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*nrows,iRow+localP*nrows,nrows*sizeof(double));
     }
 
     for(int localP = 0; localP < s;localP++){
