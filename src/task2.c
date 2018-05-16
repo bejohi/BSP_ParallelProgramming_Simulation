@@ -126,8 +126,8 @@ void cannonMatrixMult(){
 
         int downId = ((processorId + s) % numberOfProcessors);
         int rightId;
-        if(processorId / s == s-1 ){
-            rightId = (processorId - s + 1);
+        if(processorId / s == s-1){
+            rightId = processorId - s + 1;
             if(DEEP_DEBUG) printf("special case with rightId for processorId=%d\n",processorId);
         } else {
             rightId = processorId + 1;
@@ -152,8 +152,8 @@ void cannonMatrixMult(){
     }
 
     // Verify result
-    double sequ_result = 0;
-    double result = 0;
+    double sequ_result = -2;
+    double result = -1;
 
     if(processorId == 0){
         for(int x = 0; x < n; x++){
@@ -167,8 +167,8 @@ void cannonMatrixMult(){
     if(processorId == 0){
         if(result != sequ_result){
             printf("CHECK FAILED!\n");
-            if(DEBUG) printf("Parallel result for (%d,%d)= %lf\n",iToCheck,jToCheck,result);
-            if(DEBUG) printf("Sequential result for (%d,%d)= %lf\n",iToCheck,jToCheck,sequ_result);
+            if(DEBUG) printf("Parallel result for (%d,%d)=%lf\n",iToCheck,jToCheck,result);
+            if(DEBUG) printf("Sequential result for (%d,%d)=%lf\n",iToCheck,jToCheck,sequ_result);
         } else {
             printf("Check okay.\n");
         }
