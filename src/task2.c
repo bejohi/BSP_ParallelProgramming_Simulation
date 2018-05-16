@@ -2,7 +2,7 @@
 
 
 #define DEBUG 1
-#define DEEP_DEBUG 0
+#define DEEP_DEBUG 1
 #define REPORT_MODE 0
 
 static unsigned int numberOfProcessors;
