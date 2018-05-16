@@ -129,7 +129,7 @@ void cannonMatrixMult(){
         for (int i=0;i<nrows;i++) {
             for (int k=0;k<nrows;k++) {
                 for (int j=0;j<nrows;j++) {
-                    matrixC[i][j] += matrixA[i][k]* matrixB[k][j];
+                    matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
 
                 }
             }
@@ -170,7 +170,7 @@ void cannonMatrixMult(){
     if(processorId == 0){
         for(int x = 0; x < n; x++){
             if(DEEP_DEBUG) printf("iRow[%d]=%lf done jColum[%d]=%lf\n",x,iRow[x],x,jColum[x]);
-            sequ_result += iRow[x] * jColum[x];
+            sequ_result += jColum[x] * iRow[x];
         }
         bsp_get(iProcessor,pointerC, ((iToCheck % nrows) * nrows + jToCheck) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
         
