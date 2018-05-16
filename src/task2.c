@@ -144,9 +144,9 @@ void cannonMatrixMult(){
 
 
 
-        if(DEEP_DEBUG) printf("iteration %d start for processorId=%d, downId=%d, rightId=%d\n",iteration, processorId,downId,rightId);
         unsigned int downId = ((processorId + s) % numberOfProcessors);
         unsigned int rightId = processorId / s == s-1 ? processorId - s + 1 : processorId + 1;;
+        if(DEEP_DEBUG) printf("iteration %d start for processorId=%d, downId=%d, rightId=%d\n",iteration, processorId,downId,rightId);
         bsp_get(downId,pointerA,0,pointerA,sizeof(double) * nrows * nrows);
         bsp_get(rightId,pointerB,0,pointerB,sizeof(double) * nrows * nrows);
 
