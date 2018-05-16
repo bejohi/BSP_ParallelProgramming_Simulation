@@ -2,7 +2,7 @@
 
 
 #define DEBUG 1
-#define DEEP_DEBUG 1
+#define DEEP_DEBUG 0
 #define REPORT_MODE 0
 
 static unsigned int numberOfProcessors;
@@ -133,9 +133,11 @@ void cannonMatrixMult(){
     unsigned int rightId = processorId / s == s-1 ? processorId - s + jj : processorId + jj;
 
     bsp_get(downId,pointerB,0,pointerB, sizeof(double) * nrows * nrows);
-    if(DEBUG) printf("...pointerB movement done for processorId=%d\n",processorId);
+    if(DEBUG) printf("...pointerB movement done downId=%d for processorId=%d\n",downId,processorId);
+
     bsp_get(rightId,pointerA,0,pointerA, sizeof(double) * nrows * nrows);
-    if(DEBUG) printf("...pointerA movement done for processorId=%d\n",processorId);
+
+    if(DEBUG) printf("...pointerA movement done rightId=%d for processorId=%d\n",rightId,processorId);
     bsp_sync();
 
     for(int iteration = 0; iteration < s; iteration++){
