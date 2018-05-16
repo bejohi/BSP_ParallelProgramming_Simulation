@@ -96,7 +96,7 @@ void cannonMatrixMult(){
 
     for(int localP = 0; localP < s;localP++){
         //bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*nrows,iRow+localP*nrows,nrows*sizeof(double));
-        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*n,iRow,nrows*sizeof(double));
+        bsp_get(localP+s*iToCheck/nrows,pointerA,iRemote*sizeof(double)*nrows,iRow+localP*nrows,nrows*sizeof(double));
         bsp_sync();
     }
 
