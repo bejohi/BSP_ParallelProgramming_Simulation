@@ -2,7 +2,7 @@
 
 
 #define DEBUG 1
-#define DEEP_DEBUG 1
+#define DEEP_DEBUG 0
 #define REPORT_MODE 0
 
 static unsigned int numberOfProcessors;
@@ -43,7 +43,7 @@ void cannonMatrixMult(){
     if(DEBUG) printf("...distribution for processorId=%d\n",processorId);
 
 
-    int nrows = n / s;
+    int nrows = (int) (n / s);
 
     // Matrix init
     double* pointerA = (double*) malloc(sizeof(double)*nrows*nrows);
@@ -170,7 +170,7 @@ void cannonMatrixMult(){
     if(processorId == 0){
         for(int x = 0; x < n; x++){
             if(DEEP_DEBUG) printf("iRow[%d]=%lf done jColum[%d]=%lf\n",x,iRow[x],x,jColum[x]);
-            sequ_result += jColum[x] * iRow[x];
+            sequ_result += iRow[x] * jColum[x];
         }
         bsp_get(iProcessor,pointerC, ((iToCheck % nrows) * nrows + jToCheck) * sizeof(double),&result,sizeof(double)); // pid,source,offset,destination,size
         
@@ -184,8 +184,6 @@ void cannonMatrixMult(){
             if(DEBUG) printf("Sequential result for (%d,%d)=%lf\n",iToCheck,jToCheck,sequ_result);
         } else {
             printf("Check okay.\n");
-            if(DEBUG) printf("Parallel result for (%d,%d)=%lf\n",iToCheck,jToCheck,result);
-            if(DEBUG) printf("Sequential result for (%d,%d)=%lf\n",iToCheck,jToCheck,sequ_result);
         }
     }
 
