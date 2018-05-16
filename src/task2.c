@@ -40,7 +40,7 @@ void cannonMatrixMult(){
     bsp_pop_reg(&jToCheck);
 
 
-    if(DEBUG) printf("...distribution for processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...distribution for processorId=%d\n",processorId);
 
 
     int nrows = (int) (n / s);
@@ -55,7 +55,7 @@ void cannonMatrixMult(){
     double* iRow = (double*) malloc(sizeof(double)*n);
     double* jColum = (double*) malloc(sizeof(double)*n);
 
-    if(DEBUG) printf("...allocation done for processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...allocation done for processorId=%d\n",processorId);
 
     for(int i = 0; i < nrows; i++){
         matrixA[i] = pointerA + i*nrows;
@@ -63,7 +63,7 @@ void cannonMatrixMult(){
         matrixC[i] = pointerC + i*nrows;
     }
 
-    if(DEBUG) printf("...SUB allocation done for  processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...SUB allocation done for  processorId=%d\n",processorId);
 
     if(processorId == 0){
         if(DEBUG) printf("...nrows=%d\n",nrows);
@@ -78,14 +78,14 @@ void cannonMatrixMult(){
         }
     }
 
-    if(DEBUG) printf("...fill done for  processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...fill done for  processorId=%d\n",processorId);
 
     bsp_push_reg(pointerA,nrows*nrows*sizeof(double));
     bsp_push_reg(pointerB,nrows*nrows*sizeof(double));
     bsp_push_reg(pointerC,nrows*nrows*sizeof(double));
     bsp_sync();
 
-    if(DEBUG) printf("...push done for processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...push done for processorId=%d\n",processorId);
 
     int iProcessor = iToCheck / nrows * s + jToCheck / nrows;
     int iRemote = iToCheck % nrows;
@@ -100,7 +100,7 @@ void cannonMatrixMult(){
         bsp_sync();
     }
 
-    if(DEBUG) printf("...iRow init done for processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...iRow init done for processorId=%d\n",processorId);
     bsp_sync();
     for(int localP = 0; localP < s; localP++){
         for(int localN = 0; localN < nrows;localN++){
@@ -111,8 +111,8 @@ void cannonMatrixMult(){
         }
     }
 
-    if(DEBUG) printf("...jColum init done for processorId=%d\n",processorId);
-    if(DEBUG) printf("...Matrix init done for processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...jColum init done for processorId=%d\n",processorId);
+    if(DEEP_DEBUG) printf("...Matrix init done for processorId=%d\n",processorId);
 
     // Algorithm begin
     bsp_sync();
